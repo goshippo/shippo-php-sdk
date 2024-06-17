@@ -1,0 +1,12 @@
+# CarrierAccountRegistrationStatus
+
+
+## Fields
+
+| Field                                                         | Type                                                          | Required                                                      | Description                                                   | Example                                                       |
+| ------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------- |
+| `carrierAccount`                                              | *?string*                                                     | :heavy_minus_sign:                                            | N/A                                                           | 99dc410d295b4a168993cc38809cb123                              |
+| `objectCreated`                                               | [\DateTime](https://www.php.net/manual/en/class.datetime.php) | :heavy_minus_sign:                                            | N/A                                                           |                                                               |
+| `objectOwner`                                                 | *?string*                                                     | :heavy_minus_sign:                                            | N/A                                                           | tom@gmail.com                                                 |
+| `objectUpdated`                                               | [\DateTime](https://www.php.net/manual/en/class.datetime.php) | :heavy_minus_sign:                                            | N/A                                                           |                                                               |
+| `status`                                                      | *?string*                                                     | :heavy_minus_sign:                                            | N/A                                                           | PENDING_TERMS                                                 |
