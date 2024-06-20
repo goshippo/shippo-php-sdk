@@ -1,3 +1,8 @@
 composer.lock
 vendor
 .DS_Store
+build
+out
+.idea
+package.xml
+.phpunit.result.cache
