@@ -1,5 +1,13 @@
 LOCAL_SPEC_FILE=./build/public-api.yaml
 
+check: test
+
+install:
+	php composer.phar install
+
+test:
+	php composer.phar run-script test
+
 speakeasy-install: # dev task, locally install the speakeasy CLI
 	brew install speakeasy-api/homebrew-tap/speakeasy
 	speakeasy auth login
