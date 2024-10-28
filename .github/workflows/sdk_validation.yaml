@@ -30,4 +30,7 @@ jobs:
         run: |
           make install
       - name: Check
+        env:
+          CONFIGURATION: Release
+          SHIPPO_TOKEN: ${{ secrets.SHIPPO_TOKEN }}
         run: make check
