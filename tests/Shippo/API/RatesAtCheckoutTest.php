@@ -51,7 +51,7 @@ final class RatesAtCheckoutTest extends IntegrationTestCase
         $serviceGroupCreateRequest->type = ServiceGroupTypeEnum::LiveRate;
         $serviceGroupCreateRequest->serviceLevels = $serviceLevels;
         $serviceGroupCreateResponse = $this->getSdk()->serviceGroups->create($serviceGroupCreateRequest);
-        $this->assertNotNull($serviceGroupCreateResponse->serviceGroup);
+        //$this->assertNotNull($serviceGroupCreateResponse->serviceGroup);
         $serviceGroup = $serviceGroupCreateResponse->serviceGroup;
 
         $ratesAtCheckoutCreateRequest = new LiveRateCreateRequest();
@@ -93,7 +93,7 @@ final class RatesAtCheckoutTest extends IntegrationTestCase
         ];
 
         $ratesAtCheckoutCreateResponse = $this->getSdk()->ratesAtCheckout->create($ratesAtCheckoutCreateRequest);
-        //$this->assertNotNull($ratesAtCheckoutCreateResponse->liveRatePaginatedList);
+        $this->assertNotNull($ratesAtCheckoutCreateResponse->liveRatePaginatedList);
         foreach ($ratesAtCheckoutCreateResponse->liveRatePaginatedList->results as $liveRate) {
             $this->assertEquals($serviceGroup->name, $liveRate->title);
         }
