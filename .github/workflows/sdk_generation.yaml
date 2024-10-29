@@ -16,7 +16,6 @@ on:
     - cron: 0 0 * * *
 jobs:
   speakeasy_generate:
-    needs: gather-secrets
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate with AWS
