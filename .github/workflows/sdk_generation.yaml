@@ -4,7 +4,8 @@ permissions:
   contents: write
   pull-requests: write
   statuses: write
-"on":
+  id-token: write
+on:
   workflow_dispatch:
     inputs:
       force:
@@ -15,6 +16,8 @@ permissions:
     - cron: 0 0 * * *
 jobs:
   generate:
+    runs-on: ubuntu-latest
+    steps:
     - name: "Authenticate with AWS"
       uses: goshippo/shippo-action-workflows/.github/actions/aws_auth@v1.1.0
       with:
@@ -34,6 +37,6 @@ jobs:
         force: ${{ github.event.inputs.force }}
         mode: pr
         speakeasy_version: latest
-      secrets:
+      env:
         github_access_token: ${{ secrets.GITHUB_TOKEN }}
         speakeasy_api_key: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}
