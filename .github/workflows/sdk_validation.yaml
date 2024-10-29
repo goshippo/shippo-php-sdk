@@ -2,6 +2,7 @@ name: Validate
 permissions:
   contents: write
   id-token: write
+
 on:
   workflow_call:
   pull_request:
@@ -20,6 +21,7 @@ jobs:
           environment: dev-main
           oidc-name: shippo-php-sdk-pipeline
           login-to-ecr: false
+
       - name: Get Speakeasy Secrets Manager
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
@@ -27,21 +29,26 @@ jobs:
             dev-main-speakeasy-api-key
           name-transformation: uppercase
           parse-json-secrets: true
+
       - name: Check out repository
         uses: actions/checkout@v4
+
       - name: Set up PHP
         id: setup_php
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
+
       - name: cache dependencies
         uses: actions/cache@v4
         with:
           path: ./vendor
           key: python-${{ steps.setup_python.outputs.python-version }}-${{ hashFiles('setup.py') }}
+
       - name: Install dependencies
         run: |
           make install
+
       - name: Check
         run: make check 
         env:
