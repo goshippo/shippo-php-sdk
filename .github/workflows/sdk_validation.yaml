@@ -9,8 +9,6 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      SHIPPO_TOKEN: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_SHIPPO_TOKEN }}
     concurrency:
       group: php-sdk-check
     steps:
@@ -20,7 +18,7 @@ jobs:
           environment: dev-main
           oidc-name: shippo-php-sdk-pipeline
           login-to-ecr: false
-      - name: Get Speakeasy API Key
+      - name: Get Speakeasy Secrets
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
           secret-ids: |
@@ -43,4 +41,6 @@ jobs:
         run: |
           make install
       - name: Check
-        run: make check
+        run: make check 
+        env:
+          SHIPPO_TOKEN: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_SHIPPO_TOKEN }}
