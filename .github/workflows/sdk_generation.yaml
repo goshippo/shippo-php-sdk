@@ -17,7 +17,7 @@ on:
     - cron: 0 0 * * *
 
 jobs:
-  gather-secrets:
+  speakeasy_generate:
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate with AWS
@@ -35,13 +35,12 @@ jobs:
           name-transformation: uppercase
           parse-json-secrets: true
 
-  speakeasy_generate:
-    needs: gather-secrets
-    uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@v15
-    with:
-      force: ${{ github.event.inputs.force }}
-      mode: pr
-      speakeasy_version: latest
-    secrets:
-      github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      speakeasy_api_key: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}
+      - name: Generate SDK
+        uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@v15
+        with:
+          force: ${{ github.event.inputs.force }}
+          mode: pr
+          speakeasy_version: latest
+        env:
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+          speakeasy_api_key: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}
