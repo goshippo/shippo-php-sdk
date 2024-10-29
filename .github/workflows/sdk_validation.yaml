@@ -9,6 +9,8 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      SHIPPO_TOKEN: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_SHIPPO_TOKEN }}
     concurrency:
       group: php-sdk-check
     steps:
@@ -42,5 +44,3 @@ jobs:
           make install
       - name: Check
         run: make check
-        secrets:
-          SHIPPO_TOKEN: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_SHIPPO_TOKEN }}
