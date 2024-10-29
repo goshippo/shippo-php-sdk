@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate with AWS
-        uses: goshippo/shippo-action-workflows/.github/actions/aws_auth@v1.1.0
+        uses: goshippo/shippo-action-workflows/.github/actions/aws_auth@v1.0.0
         with:
           environment: ${{ inputs.environment }}
           oidc-name: shippo-php-sdk-pipeline
