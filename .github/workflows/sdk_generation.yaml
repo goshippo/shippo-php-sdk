@@ -18,23 +18,9 @@ on:
 
 jobs:
   gather-secrets:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Authenticate with AWS
-        uses: goshippo/shippo-action-workflows/.github/actions/aws_auth@v1.1.0
-        with:
-          environment: dev-main
-          oidc-name: shippo-php-sdk-pipeline
-          login-to-ecr: false
-      
-      - name: Get Speakeasy Secrets Manager
-        id: get-secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
-        with:
-          secret-ids: |
-            dev-main-speakeasy-api-key
-          name-transformation: uppercase
-          parse-json-secrets: true
+    uses: ./.github/workflows/secrets_retrieval.yaml
+    with:
+      environment: dev-main
 
   speakeasy_generate:
     needs: gather-secrets
@@ -48,5 +34,4 @@ jobs:
           speakeasy_version: latest
         env:
           github_access_token: ${{ secrets.GITHUB_TOKEN }}
-          speakeasy_api_key: ${{ steps.get-secrets.outputs.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}  # Reference the secret directly
-
+          speakeasy_api_key: ${{ jobs.gather-secrets.outputs.get-secrets.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}  # Reference the output directly
