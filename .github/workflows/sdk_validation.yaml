@@ -14,13 +14,13 @@ jobs:
     concurrency:
       group: php-sdk-check
     steps:
-      - name: "Authenticate with AWS"
+      - name: Authenticate with AWS
         uses: goshippo/shippo-action-workflows/.github/actions/aws_auth@v1.1.0
         with:
           environment: dev-main
           oidc-name: shippo-php-sdk-pipeline
           login-to-ecr: false
-      - name: Get Speakeasy Secrets
+      - name: Get Speakeasy Secrets Manager
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
           secret-ids: |
