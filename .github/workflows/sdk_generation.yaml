@@ -19,9 +19,6 @@ on:
 jobs:
   speakeasy_generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    concurrency:
-      group: php-sdk-check
     steps:
       - name: Authenticate with AWS
         uses: goshippo/shippo-action-workflows/.github/actions/aws_auth@v1.1.0
