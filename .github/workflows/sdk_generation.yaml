@@ -4,9 +4,7 @@ permissions:
   contents: write
   pull-requests: write
   statuses: write
-  id-token: write
-
-on:
+"on":
   workflow_dispatch:
     inputs:
       force:
@@ -15,42 +13,8 @@ on:
         default: false
   schedule:
     - cron: 0 0 * * *
-
 jobs:
-  retrieve-secrets:
-    runs-on: ubuntu-latest
-    outputs:
-      speakeasy_api_key: ${{ steps.set-output-var.outputs.speakeasy-api-key }}
-    steps:
-      - name: Authenticate with AWS
-        uses: goshippo/shippo-action-workflows/.github/actions/aws_auth@v1.1.0
-        with:
-          environment: dev-main
-          oidc-name: shippo-php-sdk-pipeline
-          login-to-ecr: false
-
-      - name: Get Speakeasy Secrets Manager
-        id: get-secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
-        with:
-          secret-ids: |
-            dev-main-speakeasy-api-key
-          name-transformation: uppercase
-          parse-json-secrets: true
-
-      - name: Set Output Variable
-        id: set-output-var
-        run: echo "speakeasy-api-key=${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}" >> "$GITHUB_OUTPUT"
-
-  test-outside-job:
-    runs-on: ubuntu-latest
-    needs: retrieve-secrets
-    steps:
-      - run: |
-          echo "Speakeasy API Key: ${{ needs.retrieve-secrets.outputs.speakeasy_api_key }}"
-
-  speakeasy-generate:
-    needs: retrieve-secrets
+  generate:
     uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@v15
     with:
       force: ${{ github.event.inputs.force }}
@@ -58,4 +22,4 @@ jobs:
       speakeasy_version: latest
     secrets:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      speakeasy_api_key: ${{ needs.retrieve-secrets.outputs.speakeasy_api_key }}
+      speakeasy_api_key: ${{ secrets.SPEAKEASY_PHP_API_KEY }}
