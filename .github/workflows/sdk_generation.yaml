@@ -28,14 +28,17 @@ jobs:
           login-to-ecr: false
 
       - name: Get Speakeasy Secrets Manager
+        id: get-secrets
         uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
           secret-ids: |
             dev-main-speakeasy-api-key
           name-transformation: uppercase
           parse-json-secrets: true
-        env:
-          SPEAKEASY_API_KEY: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}
+
+      - name: Save Speakeasy API Key
+        run: echo "${{ steps.get-secrets.outputs.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}" > $GITHUB_ENV
+
 
   speakeasy-generate:
     needs: retrieve-secrets
@@ -46,4 +49,4 @@ jobs:
       speakeasy_version: latest
     secrets:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
-      speakeasy_api_key: ${{ env.SPEAKEASY_API_KEY }}
+      speakeasy_api_key: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}
