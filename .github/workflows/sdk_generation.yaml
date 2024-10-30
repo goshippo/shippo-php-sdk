@@ -20,7 +20,7 @@ jobs:
   retrieve-secrets:
     runs-on: ubuntu-latest
     outputs:
-      speakeasy_api_key: ${{ steps.get-secrets.outputs.dev-main-speakeasy-api-key }}
+      speakeasy_api_key: ${{ steps.set-env-var.outputs.speakeasy-api-key }}
     steps:
       - name: Authenticate with AWS
         uses: goshippo/shippo-action-workflows/.github/actions/aws_auth@v1.1.0
@@ -37,8 +37,12 @@ jobs:
             dev-main-speakeasy-api-key
           name-transformation: uppercase
           parse-json-secrets: true
+      - name: Testing inside job
+        id: set-env-var
+        run: |
+          echo "speakeasy-api-key=${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}" >> "$GITHUB_OUTPUT"
 
-  test:
+  test-outside-job:
     runs-on: ubuntu-latest
     needs: retrieve-secrets
     steps:
