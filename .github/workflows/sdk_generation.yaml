@@ -38,7 +38,7 @@ jobs:
           name-transformation: uppercase
           parse-json-secrets: true
 
-      - id: Set env variable
+      - name: Set env variable
         run: |
           echo "${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}" >> "$GITHUB_OUTPUT"
 
