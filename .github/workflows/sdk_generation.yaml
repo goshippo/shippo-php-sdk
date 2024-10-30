@@ -38,13 +38,6 @@ jobs:
           name-transformation: uppercase
           parse-json-secrets: true
 
-      - name: Testing
-        run: |
-          echo ${{ steps.get-secrets.outputs.dev-main-speakeasy-api-key }}"
-          echo ${{ steps.get-secrets.outputs.dev-main-speakeasy-api-key-php-api-key }}"
-          echo ${{ steps.get-secrets.outputs.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}
-          echo ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}
-
   speakeasy-generate:
     needs: retrieve-secrets
     uses: speakeasy-api/sdk-generation-action/.github/workflows/workflow-executor.yaml@v15
