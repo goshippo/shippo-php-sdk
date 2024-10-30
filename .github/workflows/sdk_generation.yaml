@@ -40,7 +40,7 @@ jobs:
 
       - name: Set Output Variable
         id: set-output-var
-        run: echo "speakeasy-api-key=${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}" >> "$GITHUB_ENV"
+        run: echo "speakeasy-api-key=${{ env.DEV_MAIN_SPEAKEASY_API_KEY_PHP_API_KEY }}" >> "$GITHUB_OUTPUT"
 
   test-outside-job:
     runs-on: ubuntu-latest
