@@ -1,5 +1,5 @@
 # ServiceGroups
-
+(*serviceGroups*)
 
 ## Overview
 
@@ -21,47 +21,44 @@ Returns a list of service group objects.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->serviceGroups->list('2018-02-08');
 
-    if ($response->serviceGroupListResponse !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->serviceGroups->list(
+    shippoApiVersion: '2018-02-08'
+);
+
+if ($response->serviceGroupListResponse !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\ListServiceGroupsResponse](../../Models/Operations/ListServiceGroupsResponse.md)**
+**[?Operations\ListServiceGroupsResponse](../../Models/Operations/ListServiceGroupsResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## create
 
@@ -70,59 +67,63 @@ Creates a new service group.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-        $serviceGroupCreateRequest = new Components\ServiceGroupCreateRequest();
-    $serviceGroupCreateRequest->description = 'USPS shipping options';
-    $serviceGroupCreateRequest->flatRate = '5';
-    $serviceGroupCreateRequest->flatRateCurrency = 'USD';
-    $serviceGroupCreateRequest->freeShippingThresholdCurrency = 'USD';
-    $serviceGroupCreateRequest->freeShippingThresholdMin = '5';
-    $serviceGroupCreateRequest->name = 'USPS Shipping';
-    $serviceGroupCreateRequest->rateAdjustment = 15;
-    $serviceGroupCreateRequest->type = Components\ServiceGroupTypeEnum::FlatRate;
-    $serviceGroupCreateRequest->serviceLevels = [
-        new Components\ServiceGroupAccountAndServiceLevel(),
-    ];
+$serviceGroupCreateRequest = new Components\ServiceGroupCreateRequest(
+    description: 'USPS shipping options',
+    name: 'USPS Shipping',
+    type: Components\ServiceGroupTypeEnum::FlatRate,
+    serviceLevels: [
+        new Components\ServiceGroupAccountAndServiceLevel(
+            accountObjectId: '80feb1633d4a43c898f0058506cfd82d',
+            serviceLevelToken: 'ups_next_day_air_saver',
+        ),
+    ],
+    flatRate: '5',
+    flatRateCurrency: 'USD',
+    freeShippingThresholdCurrency: 'USD',
+    freeShippingThresholdMin: '5',
+    rateAdjustment: 15,
+);
 
-    $response = $sdk->serviceGroups->create($serviceGroupCreateRequest, '2018-02-08');
+$response = $sdk->serviceGroups->create(
+    serviceGroupCreateRequest: $serviceGroupCreateRequest,
+    shippoApiVersion: '2018-02-08'
 
-    if ($response->serviceGroup !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->serviceGroup !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                       | Type                                                                                                            | Required                                                                                                        | Description                                                                                                     | Example                                                                                                         |
-| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `serviceGroupCreateRequest`                                                                                     | [\Shippo\API\Models\Components\ServiceGroupCreateRequest](../../Models/Components/ServiceGroupCreateRequest.md) | :heavy_check_mark:                                                                                              | N/A                                                                                                             |                                                                                                                 |
-| `shippoApiVersion`                                                                                              | *string*                                                                                                        | :heavy_minus_sign:                                                                                              | String used to pick a non-default API version to use                                                            | 2018-02-08                                                                                                      |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `serviceGroupCreateRequest`                                                                                                                                        | [Components\ServiceGroupCreateRequest](../../Models/Components/ServiceGroupCreateRequest.md)                                                                       | :heavy_check_mark:                                                                                                                                                 | N/A                                                                                                                                                                |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateServiceGroupResponse](../../Models/Operations/CreateServiceGroupResponse.md)**
+**[?Operations\CreateServiceGroupResponse](../../Models/Operations/CreateServiceGroupResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## update
 
@@ -131,61 +132,65 @@ Updates an existing service group object. <br>The object_id cannot be updated as
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-        $serviceGroupUpdateRequest = new Components\ServiceGroupUpdateRequest();
-    $serviceGroupUpdateRequest->description = 'USPS shipping options';
-    $serviceGroupUpdateRequest->flatRate = '5';
-    $serviceGroupUpdateRequest->flatRateCurrency = 'USD';
-    $serviceGroupUpdateRequest->freeShippingThresholdCurrency = 'USD';
-    $serviceGroupUpdateRequest->freeShippingThresholdMin = '5';
-    $serviceGroupUpdateRequest->name = 'USPS Shipping';
-    $serviceGroupUpdateRequest->rateAdjustment = 15;
-    $serviceGroupUpdateRequest->type = Components\ServiceGroupTypeEnum::FlatRate;
-    $serviceGroupUpdateRequest->objectId = '80feb1633d4a43c898f005850';
-    $serviceGroupUpdateRequest->isActive = true;
-    $serviceGroupUpdateRequest->serviceLevels = [
-        new Components\ServiceGroupAccountAndServiceLevel(),
-    ];
+$serviceGroupUpdateRequest = new Components\ServiceGroupUpdateRequest(
+    description: 'USPS shipping options',
+    name: 'USPS Shipping',
+    type: Components\ServiceGroupTypeEnum::FlatRate,
+    objectId: '80feb1633d4a43c898f005850',
+    isActive: true,
+    serviceLevels: [
+        new Components\ServiceGroupAccountAndServiceLevel(
+            accountObjectId: '80feb1633d4a43c898f0058506cfd82d',
+            serviceLevelToken: 'ups_next_day_air_saver',
+        ),
+    ],
+    flatRate: '5',
+    flatRateCurrency: 'USD',
+    freeShippingThresholdCurrency: 'USD',
+    freeShippingThresholdMin: '5',
+    rateAdjustment: 15,
+);
 
-    $response = $sdk->serviceGroups->update('2018-02-08', $serviceGroupUpdateRequest);
+$response = $sdk->serviceGroups->update(
+    shippoApiVersion: '2018-02-08',
+    serviceGroupUpdateRequest: $serviceGroupUpdateRequest
 
-    if ($response->serviceGroup !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->serviceGroup !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                       | Type                                                                                                            | Required                                                                                                        | Description                                                                                                     | Example                                                                                                         |
-| --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `shippoApiVersion`                                                                                              | *string*                                                                                                        | :heavy_minus_sign:                                                                                              | String used to pick a non-default API version to use                                                            | 2018-02-08                                                                                                      |
-| `serviceGroupUpdateRequest`                                                                                     | [\Shippo\API\Models\Components\ServiceGroupUpdateRequest](../../Models/Components/ServiceGroupUpdateRequest.md) | :heavy_minus_sign:                                                                                              | N/A                                                                                                             |                                                                                                                 |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
+| `serviceGroupUpdateRequest`                                                                                                                                        | [?Components\ServiceGroupUpdateRequest](../../Models/Components/ServiceGroupUpdateRequest.md)                                                                      | :heavy_minus_sign:                                                                                                                                                 | N/A                                                                                                                                                                |                                                                                                                                                                    |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\UpdateServiceGroupResponse](../../Models/Operations/UpdateServiceGroupResponse.md)**
+**[?Operations\UpdateServiceGroupResponse](../../Models/Operations/UpdateServiceGroupResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## delete
 
@@ -194,45 +199,44 @@ Deletes an existing service group using an object ID.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->serviceGroups->delete('<value>', '2018-02-08');
 
-    if ($response->statusCode === 200) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->serviceGroups->delete(
+    serviceGroupId: '<id>',
+    shippoApiVersion: '2018-02-08'
+
+);
+
+if ($response->statusCode === 200) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `serviceGroupId`                                     | *string*                                             | :heavy_check_mark:                                   | Object ID of the service group                       |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `serviceGroupId`                                                                                                                                                   | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the service group                                                                                                                                     |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\DeleteServiceGroupResponse](../../Models/Operations/DeleteServiceGroupResponse.md)**
+**[?Operations\DeleteServiceGroupResponse](../../Models/Operations/DeleteServiceGroupResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |

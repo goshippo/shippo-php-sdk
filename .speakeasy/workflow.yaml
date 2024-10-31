@@ -10,3 +10,7 @@ targets:
     my-first-target:
         target: php
         source: openapi
+        codeSamples:
+            registry:
+                location: registry.speakeasyapi.dev/shippo/shippo/openapi-code-samples
+            blocking: false

@@ -1,5 +1,5 @@
 # RatesAtCheckout
-
+(*ratesAtCheckout*)
 
 ## Overview
 
@@ -30,54 +30,84 @@ template or a fully formed user parcel template object as the parcel value.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
+use Shippo\API\Utils;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-        $liveRateCreateRequest = new Components\LiveRateCreateRequest();
-    $liveRateCreateRequest->addressFrom = '<value>';
-    $liveRateCreateRequest->addressTo = '<value>';
-    $liveRateCreateRequest->lineItems = [
-        new Components\LineItem(),
-    ];
-    $liveRateCreateRequest->parcel = '5df144dca289442cv7a06';
+$liveRateCreateRequest = new Components\LiveRateCreateRequest(
+    addressTo: '<value>',
+    lineItems: [
+        new Components\LineItem(
+            currency: 'USD',
+            manufactureCountry: 'US',
+            maxDeliveryTime: Utils\Utils::parseDateTime('2016-07-23T00:00:00Z'),
+            maxShipTime: Utils\Utils::parseDateTime('2016-07-23T00:00:00Z'),
+            quantity: 20,
+            sku: 'HM-123',
+            title: 'Hippo Magazines',
+            totalPrice: '12.1',
+            variantTitle: 'June Edition',
+            weight: '0.4',
+            weightUnit: Components\WeightUnitEnum::Lb,
+            objectId: 'abf7d5675d744b6ea9fdb6f796b28f28',
+        ),
+    ],
+    addressFrom: new Components\AddressCompleteCreateRequest(
+        name: 'Shwan Ippotle',
+        street1: '215 Clayton St.',
+        city: 'San Francisco',
+        state: 'CA',
+        zip: '94117',
+        country: 'US',
+        company: 'Shippo',
+        street3: '',
+        streetNo: '',
+        phone: '+1 555 341 9393',
+        email: 'shippotle@shippo.com',
+        isResidential: true,
+        metadata: 'Customer ID 123456',
+        validate: true,
+    ),
+    parcel: '5df144dca289442cv7a06',
+);
 
-    $response = $sdk->ratesAtCheckout->create($liveRateCreateRequest, '2018-02-08');
+$response = $sdk->ratesAtCheckout->create(
+    liveRateCreateRequest: $liveRateCreateRequest,
+    shippoApiVersion: '2018-02-08'
 
-    if ($response->liveRatePaginatedList !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->liveRatePaginatedList !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                               | Type                                                                                                    | Required                                                                                                | Description                                                                                             | Example                                                                                                 |
-| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `liveRateCreateRequest`                                                                                 | [\Shippo\API\Models\Components\LiveRateCreateRequest](../../Models/Components/LiveRateCreateRequest.md) | :heavy_check_mark:                                                                                      | Generate rates at checkout                                                                              |                                                                                                         |
-| `shippoApiVersion`                                                                                      | *string*                                                                                                | :heavy_minus_sign:                                                                                      | String used to pick a non-default API version to use                                                    | 2018-02-08                                                                                              |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `liveRateCreateRequest`                                                                                                                                            | [Components\LiveRateCreateRequest](../../Models/Components/LiveRateCreateRequest.md)                                                                               | :heavy_check_mark:                                                                                                                                                 | Generate rates at checkout                                                                                                                                         |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateLiveRateResponse](../../Models/Operations/CreateLiveRateResponse.md)**
+**[?Operations\CreateLiveRateResponse](../../Models/Operations/CreateLiveRateResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## getDefaultParcelTemplate
 
@@ -86,47 +116,44 @@ Retrieve and display the currently configured default parcel template for live r
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->ratesAtCheckout->getDefaultParcelTemplate('2018-02-08');
 
-    if ($response->defaultParcelTemplate !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->ratesAtCheckout->getDefaultParcelTemplate(
+    shippoApiVersion: '2018-02-08'
+);
+
+if ($response->defaultParcelTemplate !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetDefaultParcelTemplateResponse](../../Models/Operations/GetDefaultParcelTemplateResponse.md)**
+**[?Operations\GetDefaultParcelTemplateResponse](../../Models/Operations/GetDefaultParcelTemplateResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## updateDefaultParcelTemplate
 
@@ -135,49 +162,50 @@ Update the currently configured default parcel template for live rates. The obje
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-        $defaultParcelTemplateUpdateRequest = new Components\DefaultParcelTemplateUpdateRequest();
-    $defaultParcelTemplateUpdateRequest->objectId = 'b958d3690bb04bb8b2986724872750f5';
+$defaultParcelTemplateUpdateRequest = new Components\DefaultParcelTemplateUpdateRequest(
+    objectId: 'b958d3690bb04bb8b2986724872750f5',
+);
 
-    $response = $sdk->ratesAtCheckout->updateDefaultParcelTemplate('2018-02-08', $defaultParcelTemplateUpdateRequest);
+$response = $sdk->ratesAtCheckout->updateDefaultParcelTemplate(
+    shippoApiVersion: '2018-02-08',
+    defaultParcelTemplateUpdateRequest: $defaultParcelTemplateUpdateRequest
 
-    if ($response->defaultParcelTemplate !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->defaultParcelTemplate !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                                         | Type                                                                                                                              | Required                                                                                                                          | Description                                                                                                                       | Example                                                                                                                           |
-| --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| `shippoApiVersion`                                                                                                                | *string*                                                                                                                          | :heavy_minus_sign:                                                                                                                | String used to pick a non-default API version to use                                                                              | 2018-02-08                                                                                                                        |
-| `defaultParcelTemplateUpdateRequest`                                                                                              | [\Shippo\API\Models\Components\DefaultParcelTemplateUpdateRequest](../../Models/Components/DefaultParcelTemplateUpdateRequest.md) | :heavy_minus_sign:                                                                                                                | N/A                                                                                                                               |                                                                                                                                   |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
+| `defaultParcelTemplateUpdateRequest`                                                                                                                               | [?Components\DefaultParcelTemplateUpdateRequest](../../Models/Components/DefaultParcelTemplateUpdateRequest.md)                                                    | :heavy_minus_sign:                                                                                                                                                 | N/A                                                                                                                                                                |                                                                                                                                                                    |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\UpdateDefaultParcelTemplateResponse](../../Models/Operations/UpdateDefaultParcelTemplateResponse.md)**
+**[?Operations\UpdateDefaultParcelTemplateResponse](../../Models/Operations/UpdateDefaultParcelTemplateResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## deleteDefaultParcelTemplate
 
@@ -186,44 +214,41 @@ Clears the currently configured default parcel template for live rates.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->ratesAtCheckout->deleteDefaultParcelTemplate('2018-02-08');
 
-    if ($response->statusCode === 200) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->ratesAtCheckout->deleteDefaultParcelTemplate(
+    shippoApiVersion: '2018-02-08'
+);
+
+if ($response->statusCode === 200) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\DeleteDefaultParcelTemplateResponse](../../Models/Operations/DeleteDefaultParcelTemplateResponse.md)**
+**[?Operations\DeleteDefaultParcelTemplateResponse](../../Models/Operations/DeleteDefaultParcelTemplateResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |

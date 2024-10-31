@@ -1,18 +1,20 @@
-speakeasyVersion: 1.310.0
+speakeasyVersion: 1.423.5
 sources:
     openapi:
         sourceNamespace: openapi
-        sourceRevisionDigest: sha256:3099fc4c926ab05099ea5c4cbb918e6423a03874cea38c8791efa7efbe6c5706
-        sourceBlobDigest: sha256:234f83b39101f22af624857db75abc2440fbe9c279d457ab0a7c8a393245cab1
+        sourceRevisionDigest: sha256:c31ba963a9aa9b3d6d153a677689d3af61bbd51d027014fd22e1b2888fd2d052
+        sourceBlobDigest: sha256:2c1e7bb5cb50089dd7de31676ff4c85bf469daeb1f81e5d105b34f2ec01b8a34
         tags:
             - latest
+            - main
 targets:
     my-first-target:
         source: openapi
         sourceNamespace: openapi
-        sourceRevisionDigest: sha256:3099fc4c926ab05099ea5c4cbb918e6423a03874cea38c8791efa7efbe6c5706
-        sourceBlobDigest: sha256:234f83b39101f22af624857db75abc2440fbe9c279d457ab0a7c8a393245cab1
-        outLocation: /Users/mike.lueders/dev/shippo-php-sdk
+        sourceRevisionDigest: sha256:c31ba963a9aa9b3d6d153a677689d3af61bbd51d027014fd22e1b2888fd2d052
+        sourceBlobDigest: sha256:2c1e7bb5cb50089dd7de31676ff4c85bf469daeb1f81e5d105b34f2ec01b8a34
+        codeSamplesNamespace: openapi-code-samples
+        codeSamplesRevisionDigest: sha256:5b6d7f9b27eda269c52e24652294770e181a7fea26661327de64e32294254579
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -26,3 +28,7 @@ workflow:
         my-first-target:
             target: php
             source: openapi
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/shippo/shippo/openapi-code-samples
+                blocking: false
