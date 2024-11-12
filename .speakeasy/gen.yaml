@@ -11,8 +11,15 @@ generation:
     requestResponseComponentNamesFeb2024: true
   auth:
     oAuth2ClientCredentialsEnabled: true
+    oAuth2PasswordEnabled: false
+externalDocs:
+  version: ""
+  url: https://github.com/goshippo/shippo-php-sdk
+info:
+  version: ""
+  description: Packagist library which integrates with Shippo Multi Carrier Shipping API. This library provides access to Shippo (goshippo.com) API capabilities. Including label generation, rating, tracking and more.
 php:
-  version: 0.0.2
+  version: 0.1.0
   author: Shippo
   clientServerStatusCodesAsErrors: true
   defaultErrorName: SDKError
@@ -27,12 +34,16 @@ php:
       shared: Models/Components
       webhooks: Models/Webhooks
   inputModelSuffix: input
+  laravelServiceProvider:
+    enabled: false
+    svcName: openapi
   license: MIT License
   maxMethodParams: 3
   methodArguments: require-security-and-request
   namespace: Shippo\API
   outputModelSuffix: output
-  packageName: shippo
+  packageName: Shippo
+  packageTags: USPS Fedex UPS API Shippo
   projectUrls: {}
   responseFormat: flat
   templateVersion: v1
