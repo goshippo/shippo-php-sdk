@@ -1,6 +1,6 @@
 configVersion: 2.0.0
 generation:
-  sdkClassName: ShippoSDK
+  sdkClassName: Shippo
   maintainOpenAPIOrder: true
   usageSnippets:
     optionalPropertyRendering: withExample
@@ -13,6 +13,10 @@ generation:
     oAuth2ClientCredentialsEnabled: true
 php:
   version: 0.0.2
+  author: Shippo
+  clientServerStatusCodesAsErrors: true
+  defaultErrorName: SDKError
+  description: Shipping API Python library (USPS, FedEx, UPS and more)
   flattenGlobalSecurity: true
   imports:
     option: openapi
@@ -23,7 +27,12 @@ php:
       shared: Models/Components
       webhooks: Models/Webhooks
   inputModelSuffix: input
-  maxMethodParams: 4
+  license: MIT License
+  maxMethodParams: 3
+  methodArguments: require-security-and-request
   namespace: Shippo\API
   outputModelSuffix: output
-  packageName: shippo/api
+  packageName: shippo
+  projectUrls: {}
+  responseFormat: flat
+  templateVersion: v1
