@@ -10,3 +10,7 @@ targets:
     my-first-target:
         target: php
         source: openapi
+        publish:
+            packagist:
+                username: tech@goshippo.com
+                token: $packagist_token
