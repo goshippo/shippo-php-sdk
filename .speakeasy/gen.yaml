@@ -39,10 +39,9 @@ php:
     svcName: openapi
   license: MIT License
   maxMethodParams: 3
-  methodArguments: require-security-and-request
   namespace: Shippo\API
   outputModelSuffix: output
-  packageName: Shippo
+  packageName: shippo/shippo-php
   packageTags: USPS Fedex UPS API Shippo
   projectUrls: {}
   responseFormat: flat
