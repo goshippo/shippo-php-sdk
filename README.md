@@ -32,8 +32,6 @@ Shippo external API.: Use this API to integrate with the Shippo service
 <!-- Start SDK Installation [installation] -->
 ## SDK Installation
 
-### Composer
-
 The SDK relies on [Composer](https://getcomposer.org/) to manage its dependencies.
 
 To install the SDK first add the below to your `composer.json` file:
@@ -63,6 +61,7 @@ composer update
 ## SDK Example Usage
 
 ### Example
+
 ```php
 declare(strict_types=1);
 
