@@ -26,4 +26,4 @@ jobs:
     secrets:
       github_access_token: ${{ secrets.GITHUB_TOKEN }}
       packagist_token: ${{ secrets.PACKAGIST_TOKEN }}
-      speakeasy_api_key: ${{ secrets.SPEAKEASY_API_KEY }}
+      speakeasy_api_key: ${{ secrets.SPEAKEASY_PHP_API_KEY }}
