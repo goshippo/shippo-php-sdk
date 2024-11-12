@@ -7,6 +7,10 @@ sources:
         registry:
             location: registry.speakeasyapi.dev/shippo/shippo/openapi
 targets:
-    my-first-target:
+    php:
         target: php
         source: openapi
+        publish:
+            packagist:
+                username: tech@shippo.com
+                token: $packagist_token
