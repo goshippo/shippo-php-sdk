@@ -1,5 +1,5 @@
 # CarrierParcelTemplates
-
+(*carrierParcelTemplates*)
 
 ## Overview
 
@@ -14,54 +14,61 @@ A carrier parcel template represents a package used for shipping that has preset
 
 ## list
 
-List all carrier parcel template objects. <br> Use the following query string params to filter the results as needed. <br> <ul> <li>`include=all` (the default). Includes templates from all carriers </li> <li>`include=user`. Includes templates only from carriers which the user has added (whether or not they're currently enabled) </li> <li>`include=enabled`. includes templates only for carriers which the user has added and enabled </li> <li>`carrier=*token*`. filter by specific carrier, e.g. fedex, usps </li> </ul>
+List all carrier parcel template objects. <br> Use the following query string params to filter the results as needed. <br>
+<ul>
+<li>`include=all` (the default). Includes templates from all carriers </li>
+<li>`include=user`. Includes templates only from carriers which the user has added (whether or not they're currently enabled) </li>
+<li>`include=enabled`. includes templates only for carriers which the user has added and enabled </li>
+<li>`carrier=*token*`. filter by specific carrier, e.g. fedex, usps </li>
+</ul>
 
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Operations;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->carrierParcelTemplates->list(Operations\IncludeT::Enabled, 'fedex', '2018-02-08');
 
-    if ($response->carrierParcelTemplateList !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->carrierParcelTemplates->list(
+    include: Operations\IncludeT::Enabled,
+    carrier: 'fedex',
+    shippoApiVersion: '2018-02-08'
+
+);
+
+if ($response->carrierParcelTemplateList !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                     | Type                                                                          | Required                                                                      | Description                                                                   | Example                                                                       |
-| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `include`                                                                     | [\Shippo\API\Models\Operations\IncludeT](../../Models/Operations/IncludeT.md) | :heavy_minus_sign:                                                            | filter by user or enabled                                                     |                                                                               |
-| `carrier`                                                                     | *string*                                                                      | :heavy_minus_sign:                                                            | filter by specific carrier                                                    | fedex                                                                         |
-| `shippoApiVersion`                                                            | *string*                                                                      | :heavy_minus_sign:                                                            | String used to pick a non-default API version to use                          | 2018-02-08                                                                    |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `include`                                                                                                                                                          | [?Operations\IncludeT](../../Models/Operations/IncludeT.md)                                                                                                        | :heavy_minus_sign:                                                                                                                                                 | filter by user or enabled                                                                                                                                          |                                                                                                                                                                    |
+| `carrier`                                                                                                                                                          | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | filter by specific carrier                                                                                                                                         | fedex                                                                                                                                                              |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\ListCarrierParcelTemplatesResponse](../../Models/Operations/ListCarrierParcelTemplatesResponse.md)**
+**[?Operations\ListCarrierParcelTemplatesResponse](../../Models/Operations/ListCarrierParcelTemplatesResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## get
 
@@ -70,45 +77,44 @@ Fetches the parcel template information for a specific carrier parcel template, 
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->carrierParcelTemplates->get('<value>', '2018-02-08');
 
-    if ($response->carrierParcelTemplate !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->carrierParcelTemplates->get(
+    carrierParcelTemplateToken: '<value>',
+    shippoApiVersion: '2018-02-08'
+
+);
+
+if ($response->carrierParcelTemplate !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                       | Type                                                            | Required                                                        | Description                                                     | Example                                                         |
-| --------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- |
-| `carrierParcelTemplateToken`                                    | *string*                                                        | :heavy_check_mark:                                              | The unique string representation of the carrier parcel template |                                                                 |
-| `shippoApiVersion`                                              | *string*                                                        | :heavy_minus_sign:                                              | String used to pick a non-default API version to use            | 2018-02-08                                                      |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `carrierParcelTemplateToken`                                                                                                                                       | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | The unique string representation of the carrier parcel template                                                                                                    |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetCarrierParcelTemplateResponse](../../Models/Operations/GetCarrierParcelTemplateResponse.md)**
+**[?Operations\GetCarrierParcelTemplateResponse](../../Models/Operations/GetCarrierParcelTemplateResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |

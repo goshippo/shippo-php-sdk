@@ -11,8 +11,11 @@ generation:
     requestResponseComponentNamesFeb2024: true
   auth:
     oAuth2ClientCredentialsEnabled: true
+    oAuth2PasswordEnabled: false
 php:
-  version: 0.0.2
+  version: 0.1.0
+  clientServerStatusCodesAsErrors: true
+  defaultErrorName: SDKException
   flattenGlobalSecurity: true
   imports:
     option: openapi
@@ -23,7 +26,11 @@ php:
       shared: Models/Components
       webhooks: Models/Webhooks
   inputModelSuffix: input
+  laravelServiceProvider:
+    enabled: false
+    svcName: openapi
   maxMethodParams: 4
+  methodArguments: infer-optional-args
   namespace: Shippo\API
   outputModelSuffix: output
   packageName: shippo/api

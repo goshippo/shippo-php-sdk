@@ -1,5 +1,5 @@
 # Shipments
-
+(*shipments*)
 
 ## Overview
 
@@ -40,49 +40,45 @@ Optional path parameters:<br>
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Operations;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
+$request = new Operations\ListShipmentsRequest();
 
-    $response = $sdk->shipments->list(768578, 99895, '2018-02-08');
+$response = $sdk->shipments->list(
+    request: $request
+);
 
-    if ($response->shipmentPaginatedList !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->shipmentPaginatedList !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `page`                                               | *int*                                                | :heavy_minus_sign:                                   | The page number you want to select                   |                                                      |
-| `results`                                            | *int*                                                | :heavy_minus_sign:                                   | The number of results to return per page (max 100)   |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                          | Type                                                                               | Required                                                                           | Description                                                                        |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `$request`                                                                         | [Operations\ListShipmentsRequest](../../Models/Operations/ListShipmentsRequest.md) | :heavy_check_mark:                                                                 | The request object to use for the request.                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\ListShipmentsResponse](../../Models/Operations/ListShipmentsResponse.md)**
+**[?Operations\ListShipmentsResponse](../../Models/Operations/ListShipmentsResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## create
 
@@ -91,195 +87,196 @@ Creates a new shipment object.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-        $shipmentCreateRequest = new Components\ShipmentCreateRequest();
-    $shipmentCreateRequest->extra = new Components\ShipmentExtra();
-    $shipmentCreateRequest->extra->accountsReceivableCustomerAccount = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->accountsReceivableCustomerAccount->prefix = 'ABC';
-    $shipmentCreateRequest->extra->accountsReceivableCustomerAccount->value = 'value';
-    $shipmentCreateRequest->extra->accountsReceivableCustomerAccount->refSort = 1;
-    $shipmentCreateRequest->extra->alcohol = new Components\Alcohol();
-    $shipmentCreateRequest->extra->alcohol->containsAlcohol = false;
-    $shipmentCreateRequest->extra->alcohol->recipientType = Components\RecipientType::Licensee;
-    $shipmentCreateRequest->extra->ancillaryEndorsement = Components\AncillaryEndorsement::ForwardingServiceRequested;
-    $shipmentCreateRequest->extra->appropriationNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->appropriationNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->appropriationNumber->value = 'value';
-    $shipmentCreateRequest->extra->appropriationNumber->refSort = 1;
-    $shipmentCreateRequest->extra->authorityToLeave = false;
-    $shipmentCreateRequest->extra->billOfLadingNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->billOfLadingNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->billOfLadingNumber->value = 'value';
-    $shipmentCreateRequest->extra->billOfLadingNumber->refSort = 1;
-    $shipmentCreateRequest->extra->billing = new Components\Billing();
-    $shipmentCreateRequest->extra->billing->account = '68421709';
-    $shipmentCreateRequest->extra->billing->country = '<value>';
-    $shipmentCreateRequest->extra->billing->participationCode = '<value>';
-    $shipmentCreateRequest->extra->billing->type = Components\Type::ThirdPartyConsignee;
-    $shipmentCreateRequest->extra->billing->zip = '98041';
-    $shipmentCreateRequest->extra->bypassAddressValidation = false;
-    $shipmentCreateRequest->extra->carbonNeutral = false;
-    $shipmentCreateRequest->extra->carrierHubId = '<value>';
-    $shipmentCreateRequest->extra->carrierHubTravelTime = 301510;
-    $shipmentCreateRequest->extra->cod = new Components\Cod();
-    $shipmentCreateRequest->extra->cod->amount = '5.5';
-    $shipmentCreateRequest->extra->cod->currency = 'USD';
-    $shipmentCreateRequest->extra->cod->paymentMethod = Components\PaymentMethod::Cash;
-    $shipmentCreateRequest->extra->codNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->codNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->codNumber->value = 'value';
-    $shipmentCreateRequest->extra->codNumber->refSort = 1;
-    $shipmentCreateRequest->extra->containerType = '<value>';
-    $shipmentCreateRequest->extra->criticalPullTime = '<value>';
-    $shipmentCreateRequest->extra->customerBranch = '<value>';
-    $shipmentCreateRequest->extra->customerReference = new Components\CustomerReference();
-    $shipmentCreateRequest->extra->customerReference->prefix = '<value>';
-    $shipmentCreateRequest->extra->customerReference->value = '<value>';
-    $shipmentCreateRequest->extra->customerReference->refSort = 1;
-    $shipmentCreateRequest->extra->dangerousGoods = new Components\DangerousGoodsObject();
-    $shipmentCreateRequest->extra->dangerousGoods->contains = false;
-    $shipmentCreateRequest->extra->dangerousGoods->biologicalMaterial = new Components\DangerousGoodsBiologicalMaterial();
-    $shipmentCreateRequest->extra->dangerousGoods->biologicalMaterial->contains = false;
-    $shipmentCreateRequest->extra->dangerousGoods->lithiumBatteries = new Components\DangerousGoodsLithiumBatteries();
-    $shipmentCreateRequest->extra->dangerousGoods->lithiumBatteries->contains = false;
-    $shipmentCreateRequest->extra->dangerousGoodsCode = Components\DangerousGoodsCode::One;
-    $shipmentCreateRequest->extra->dealerOrderNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->dealerOrderNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->dealerOrderNumber->value = 'value';
-    $shipmentCreateRequest->extra->dealerOrderNumber->refSort = 1;
-    $shipmentCreateRequest->extra->deliveryInstructions = '<value>';
-    $shipmentCreateRequest->extra->deptNumber = new Components\DepartmentNumber();
-    $shipmentCreateRequest->extra->deptNumber->prefix = '<value>';
-    $shipmentCreateRequest->extra->deptNumber->value = '<value>';
-    $shipmentCreateRequest->extra->deptNumber->refSort = 3;
-    $shipmentCreateRequest->extra->dryIce = new Components\DryIce();
-    $shipmentCreateRequest->extra->dryIce->containsDryIce = false;
-    $shipmentCreateRequest->extra->dryIce->weight = '<value>';
-    $shipmentCreateRequest->extra->fdaProductCode = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->fdaProductCode->prefix = 'ABC';
-    $shipmentCreateRequest->extra->fdaProductCode->value = 'value';
-    $shipmentCreateRequest->extra->fdaProductCode->refSort = 1;
-    $shipmentCreateRequest->extra->fulfillmentCenter = '<value>';
-    $shipmentCreateRequest->extra->insurance = new Components\Insurance();
-    $shipmentCreateRequest->extra->insurance->amount = '5.5';
-    $shipmentCreateRequest->extra->insurance->content = '<value>';
-    $shipmentCreateRequest->extra->insurance->currency = 'USD';
-    $shipmentCreateRequest->extra->insurance->provider = Components\Provider::Ontrac;
-    $shipmentCreateRequest->extra->invoiceNumber = new Components\InvoiceNumber();
-    $shipmentCreateRequest->extra->invoiceNumber->prefix = '<value>';
-    $shipmentCreateRequest->extra->invoiceNumber->value = '<value>';
-    $shipmentCreateRequest->extra->invoiceNumber->refSort = 2;
-    $shipmentCreateRequest->extra->isReturn = false;
-    $shipmentCreateRequest->extra->lasershipAttrs = [
-        Components\ShipmentExtraLasershipAttributesEnum::Perishable,
-    ];
-    $shipmentCreateRequest->extra->lasershipDeclaredValue = '<value>';
-    $shipmentCreateRequest->extra->manifestNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->manifestNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->manifestNumber->value = 'value';
-    $shipmentCreateRequest->extra->manifestNumber->refSort = 1;
-    $shipmentCreateRequest->extra->modelNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->modelNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->modelNumber->value = 'value';
-    $shipmentCreateRequest->extra->modelNumber->refSort = 1;
-    $shipmentCreateRequest->extra->partNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->partNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->partNumber->value = 'value';
-    $shipmentCreateRequest->extra->partNumber->refSort = 1;
-    $shipmentCreateRequest->extra->poNumber = new Components\PoNumber();
-    $shipmentCreateRequest->extra->poNumber->prefix = '<value>';
-    $shipmentCreateRequest->extra->poNumber->value = '<value>';
-    $shipmentCreateRequest->extra->poNumber->refSort = 2;
-    $shipmentCreateRequest->extra->preferredDeliveryTimeframe = Components\PreferredDeliveryTimeframe::NineteenMillionTwoThousandOneHundred;
-    $shipmentCreateRequest->extra->premium = false;
-    $shipmentCreateRequest->extra->productionCode = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->productionCode->prefix = 'ABC';
-    $shipmentCreateRequest->extra->productionCode->value = 'value';
-    $shipmentCreateRequest->extra->productionCode->refSort = 1;
-    $shipmentCreateRequest->extra->purchaseRequestNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->purchaseRequestNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->purchaseRequestNumber->value = 'value';
-    $shipmentCreateRequest->extra->purchaseRequestNumber->refSort = 1;
-    $shipmentCreateRequest->extra->qrCodeRequested = false;
-    $shipmentCreateRequest->extra->reference1 = '<value>';
-    $shipmentCreateRequest->extra->reference2 = '<value>';
-    $shipmentCreateRequest->extra->requestRetailRates = false;
-    $shipmentCreateRequest->extra->returnServiceType = '<value>';
-    $shipmentCreateRequest->extra->rmaNumber = new Components\RmaNumber();
-    $shipmentCreateRequest->extra->rmaNumber->prefix = '<value>';
-    $shipmentCreateRequest->extra->rmaNumber->value = '<value>';
-    $shipmentCreateRequest->extra->rmaNumber->refSort = 1;
-    $shipmentCreateRequest->extra->saturdayDelivery = false;
-    $shipmentCreateRequest->extra->salespersonNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->salespersonNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->salespersonNumber->value = 'value';
-    $shipmentCreateRequest->extra->salespersonNumber->refSort = 1;
-    $shipmentCreateRequest->extra->serialNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->serialNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->serialNumber->value = 'value';
-    $shipmentCreateRequest->extra->serialNumber->refSort = 1;
-    $shipmentCreateRequest->extra->signatureConfirmation = Components\SignatureConfirmation::CarrierConfirmation;
-    $shipmentCreateRequest->extra->storeNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->storeNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->storeNumber->value = 'value';
-    $shipmentCreateRequest->extra->storeNumber->refSort = 1;
-    $shipmentCreateRequest->extra->transactionReferenceNumber = new Components\UPSReferenceFields();
-    $shipmentCreateRequest->extra->transactionReferenceNumber->prefix = 'ABC';
-    $shipmentCreateRequest->extra->transactionReferenceNumber->value = 'value';
-    $shipmentCreateRequest->extra->transactionReferenceNumber->refSort = 1;
-    $shipmentCreateRequest->metadata = 'Customer ID 123456';
-    $shipmentCreateRequest->shipmentDate = '2021-03-22T12:00:00Z';
-    $shipmentCreateRequest->addressFrom = '<value>';
-    $shipmentCreateRequest->addressReturn = '<value>';
-    $shipmentCreateRequest->addressTo = '<value>';
-    $shipmentCreateRequest->customsDeclaration = '<value>';
-    $shipmentCreateRequest->async = false;
-    $shipmentCreateRequest->carrierAccounts = [
-        '<value>',
-    ];
-    $shipmentCreateRequest->parcels = [
-        '<value>',
-    ];
+$shipmentCreateRequest = new Components\ShipmentCreateRequest(
+    addressFrom: new Components\AddressCreateRequest(
+        country: 'US',
+        name: 'Shwan Ippotle',
+        company: 'Shippo',
+        street1: '215 Clayton St.',
+        street3: '',
+        streetNo: '',
+        city: 'San Francisco',
+        state: 'CA',
+        zip: '94117',
+        phone: '+1 555 341 9393',
+        email: 'shippotle@shippo.com',
+        isResidential: true,
+        metadata: 'Customer ID 123456',
+        validate: true,
+    ),
+    addressTo: 'd799c2679e644279b59fe661ac8fa489',
+    parcels: [
+        new Components\ParcelCreateFromTemplateRequest(
+            massUnit: Components\WeightUnitEnum::Lb,
+            weight: '1',
+            template: Components\ParcelTemplateFedExEnum::FedExBox25kg,
+            extra: new Components\ParcelExtra(
+                cod: new Components\Cod(
+                    amount: '5.5',
+                    currency: 'USD',
+                    paymentMethod: Components\PaymentMethod::Cash,
+                ),
+                insurance: new Components\ParcelInsurance(
+                    amount: '5.5',
+                    content: 'Laptop',
+                    currency: 'USD',
+                    provider: Components\ParcelInsuranceProvider::Ups,
+                ),
+            ),
+            metadata: 'Customer ID 123456',
+        ),
+    ],
+    extra: new Components\ShipmentExtra(
+        accountsReceivableCustomerAccount: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        appropriationNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        billOfLadingNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        cod: new Components\Cod(
+            amount: '5.5',
+            currency: 'USD',
+            paymentMethod: Components\PaymentMethod::Cash,
+        ),
+        codNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        customerReference: new Components\CustomerReference(
+            refSort: 1,
+        ),
+        dealerOrderNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        deptNumber: new Components\DepartmentNumber(
+            refSort: 3,
+        ),
+        fdaProductCode: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        insurance: new Components\Insurance(
+            amount: '5.5',
+            currency: 'USD',
+        ),
+        invoiceNumber: new Components\InvoiceNumber(
+            refSort: 2,
+        ),
+        manifestNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        modelNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        partNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        poNumber: new Components\PoNumber(
+            refSort: 2,
+        ),
+        productionCode: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        purchaseRequestNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        rmaNumber: new Components\RmaNumber(
+            refSort: 1,
+        ),
+        salespersonNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        serialNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        storeNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+        transactionReferenceNumber: new Components\UPSReferenceFields(
+            prefix: 'ABC',
+            value: 'value',
+            refSort: 1,
+        ),
+    ),
+    metadata: 'Customer ID 123456',
+    shipmentDate: '2021-03-22T12:00:00Z',
+    addressReturn: 'd799c2679e644279b59fe661ac8fa488',
+    customsDeclaration: 'adcfdddf8ec64b84ad22772bce3ea37a',
+    carrierAccounts: [
+        '065a4a8c10d24a34ab932163a1b87f52',
+        '73f706f4bdb94b54a337563840ce52b0',
+    ],
+);
 
-    $response = $sdk->shipments->create($shipmentCreateRequest, '2018-02-08');
+$response = $sdk->shipments->create(
+    shipmentCreateRequest: $shipmentCreateRequest,
+    shippoApiVersion: '2018-02-08'
 
-    if ($response->shipment !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->shipment !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                               | Type                                                                                                    | Required                                                                                                | Description                                                                                             | Example                                                                                                 |
-| ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `shipmentCreateRequest`                                                                                 | [\Shippo\API\Models\Components\ShipmentCreateRequest](../../Models/Components/ShipmentCreateRequest.md) | :heavy_check_mark:                                                                                      | Shipment details and contact info.                                                                      |                                                                                                         |
-| `shippoApiVersion`                                                                                      | *string*                                                                                                | :heavy_minus_sign:                                                                                      | String used to pick a non-default API version to use                                                    | 2018-02-08                                                                                              |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `shipmentCreateRequest`                                                                                                                                            | [Components\ShipmentCreateRequest](../../Models/Components/ShipmentCreateRequest.md)                                                                               | :heavy_check_mark:                                                                                                                                                 | Shipment details and contact info.                                                                                                                                 |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateShipmentResponse](../../Models/Operations/CreateShipmentResponse.md)**
+**[?Operations\CreateShipmentResponse](../../Models/Operations/CreateShipmentResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## get
 
@@ -288,45 +285,44 @@ Returns an existing shipment using an object ID
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->shipments->get('<value>', '2018-02-08');
 
-    if ($response->shipment !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->shipments->get(
+    shipmentId: '<id>',
+    shippoApiVersion: '2018-02-08'
+
+);
+
+if ($response->shipment !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `shipmentId`                                         | *string*                                             | :heavy_check_mark:                                   | Object ID of the shipment to update                  |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `shipmentId`                                                                                                                                                       | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the shipment to update                                                                                                                                |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetShipmentResponse](../../Models/Operations/GetShipmentResponse.md)**
+**[?Operations\GetShipmentResponse](../../Models/Operations/GetShipmentResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |

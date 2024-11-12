@@ -1,5 +1,5 @@
 # Orders
-
+(*orders*)
 
 ## Overview
 
@@ -30,49 +30,51 @@ Returns a list of all order objects.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
+use Shippo\API\Models\Operations;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
+$request = new Operations\ListOrdersRequest(
+    orderStatus: [
+        Components\OrderStatusEnum::Paid,
+    ],
+    shopApp: Components\OrderShopAppEnum::Shippo,
+);
 
-    $response = $sdk->orders->list(768578, 99895, '2018-02-08');
+$response = $sdk->orders->list(
+    request: $request
+);
 
-    if ($response->orderPaginatedList !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->orderPaginatedList !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `page`                                               | *int*                                                | :heavy_minus_sign:                                   | The page number you want to select                   |                                                      |
-| `results`                                            | *int*                                                | :heavy_minus_sign:                                   | The number of results to return per page (max 100)   |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                    | Type                                                                         | Required                                                                     | Description                                                                  |
+| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `$request`                                                                   | [Operations\ListOrdersRequest](../../Models/Operations/ListOrdersRequest.md) | :heavy_check_mark:                                                           | The request object to use for the request.                                   |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\ListOrdersResponse](../../Models/Operations/ListOrdersResponse.md)**
+**[?Operations\ListOrdersResponse](../../Models/Operations/ListOrdersResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## create
 
@@ -81,96 +83,110 @@ Creates a new order object.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
+use Shippo\API\Utils;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-        $orderCreateRequest = new Components\OrderCreateRequest();
-    $orderCreateRequest->currency = 'USD';
-    $orderCreateRequest->notes = 'This customer is a VIP';
-    $orderCreateRequest->orderNumber = '#1068';
-    $orderCreateRequest->orderStatus = Components\OrderStatusEnum::Paid;
-    $orderCreateRequest->placedAt = '2016-09-23T01:28:12Z';
-    $orderCreateRequest->shippingCost = '12.83';
-    $orderCreateRequest->shippingCostCurrency = 'USD';
-    $orderCreateRequest->shippingMethod = 'USPS First Class Package';
-    $orderCreateRequest->subtotalPrice = '12.1';
-    $orderCreateRequest->totalPrice = '24.93';
-    $orderCreateRequest->totalTax = '0.0';
-    $orderCreateRequest->weight = '0.4';
-    $orderCreateRequest->weightUnit = Components\WeightUnitEnum::Lb;
-    $orderCreateRequest->fromAddress = new Components\AddressCreateRequest();
-    $orderCreateRequest->fromAddress->name = 'Shwan Ippotle';
-    $orderCreateRequest->fromAddress->company = 'Shippo';
-    $orderCreateRequest->fromAddress->street1 = '215 Clayton St.';
-    $orderCreateRequest->fromAddress->street2 = '<value>';
-    $orderCreateRequest->fromAddress->street3 = '';
-    $orderCreateRequest->fromAddress->streetNo = '';
-    $orderCreateRequest->fromAddress->city = 'San Francisco';
-    $orderCreateRequest->fromAddress->state = 'CA';
-    $orderCreateRequest->fromAddress->zip = '94117';
-    $orderCreateRequest->fromAddress->country = 'US';
-    $orderCreateRequest->fromAddress->phone = '+1 555 341 9393';
-    $orderCreateRequest->fromAddress->email = 'shippotle@shippo.com';
-    $orderCreateRequest->fromAddress->isResidential = true;
-    $orderCreateRequest->fromAddress->metadata = 'Customer ID 123456';
-    $orderCreateRequest->fromAddress->validate = true;
-    $orderCreateRequest->toAddress = new Components\AddressCreateRequest();
-    $orderCreateRequest->toAddress->name = 'Shwan Ippotle';
-    $orderCreateRequest->toAddress->company = 'Shippo';
-    $orderCreateRequest->toAddress->street1 = '215 Clayton St.';
-    $orderCreateRequest->toAddress->street2 = '<value>';
-    $orderCreateRequest->toAddress->street3 = '';
-    $orderCreateRequest->toAddress->streetNo = '';
-    $orderCreateRequest->toAddress->city = 'San Francisco';
-    $orderCreateRequest->toAddress->state = 'CA';
-    $orderCreateRequest->toAddress->zip = '94117';
-    $orderCreateRequest->toAddress->country = 'US';
-    $orderCreateRequest->toAddress->phone = '+1 555 341 9393';
-    $orderCreateRequest->toAddress->email = 'shippotle@shippo.com';
-    $orderCreateRequest->toAddress->isResidential = true;
-    $orderCreateRequest->toAddress->metadata = 'Customer ID 123456';
-    $orderCreateRequest->toAddress->validate = true;
-    $orderCreateRequest->lineItems = [
-        new Components\LineItemBase(),
-    ];
+$orderCreateRequest = new Components\OrderCreateRequest(
+    placedAt: '2016-09-23T01:28:12Z',
+    toAddress: new Components\AddressCreateRequest(
+        country: 'US',
+        name: 'Shwan Ippotle',
+        company: 'Shippo',
+        street1: '215 Clayton St.',
+        street3: '',
+        streetNo: '',
+        city: 'San Francisco',
+        state: 'CA',
+        zip: '94117',
+        phone: '+1 555 341 9393',
+        email: 'shippotle@shippo.com',
+        isResidential: true,
+        metadata: 'Customer ID 123456',
+        validate: true,
+    ),
+    currency: 'USD',
+    notes: 'This customer is a VIP',
+    orderNumber: '#1068',
+    orderStatus: Components\OrderStatusEnum::Paid,
+    shippingCost: '12.83',
+    shippingCostCurrency: 'USD',
+    shippingMethod: 'USPS First Class Package',
+    subtotalPrice: '12.1',
+    totalPrice: '24.93',
+    totalTax: '0.0',
+    weight: '0.4',
+    weightUnit: Components\WeightUnitEnum::Lb,
+    fromAddress: new Components\AddressCreateRequest(
+        country: 'US',
+        name: 'Shwan Ippotle',
+        company: 'Shippo',
+        street1: '215 Clayton St.',
+        street3: '',
+        streetNo: '',
+        city: 'San Francisco',
+        state: 'CA',
+        zip: '94117',
+        phone: '+1 555 341 9393',
+        email: 'shippotle@shippo.com',
+        isResidential: true,
+        metadata: 'Customer ID 123456',
+        validate: true,
+    ),
+    lineItems: [
+        new Components\LineItemBase(
+            currency: 'USD',
+            manufactureCountry: 'US',
+            maxDeliveryTime: Utils\Utils::parseDateTime('2016-07-23T00:00:00Z'),
+            maxShipTime: Utils\Utils::parseDateTime('2016-07-23T00:00:00Z'),
+            quantity: 20,
+            sku: 'HM-123',
+            title: 'Hippo Magazines',
+            totalPrice: '12.1',
+            variantTitle: 'June Edition',
+            weight: '0.4',
+            weightUnit: Components\WeightUnitEnum::Lb,
+        ),
+    ],
+);
 
-    $response = $sdk->orders->create($orderCreateRequest, '2018-02-08');
+$response = $sdk->orders->create(
+    orderCreateRequest: $orderCreateRequest,
+    shippoApiVersion: '2018-02-08'
 
-    if ($response->order !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->order !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                         | Type                                                                                              | Required                                                                                          | Description                                                                                       | Example                                                                                           |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `orderCreateRequest`                                                                              | [\Shippo\API\Models\Components\OrderCreateRequest](../../Models/Components/OrderCreateRequest.md) | :heavy_check_mark:                                                                                | Order details.                                                                                    |                                                                                                   |
-| `shippoApiVersion`                                                                                | *string*                                                                                          | :heavy_minus_sign:                                                                                | String used to pick a non-default API version to use                                              | 2018-02-08                                                                                        |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `orderCreateRequest`                                                                                                                                               | [Components\OrderCreateRequest](../../Models/Components/OrderCreateRequest.md)                                                                                     | :heavy_check_mark:                                                                                                                                                 | Order details.                                                                                                                                                     |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateOrderResponse](../../Models/Operations/CreateOrderResponse.md)**
+**[?Operations\CreateOrderResponse](../../Models/Operations/CreateOrderResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
 
 ## get
 
@@ -179,45 +195,44 @@ Retrieves an existing order using an object ID.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->orders->get('<value>', '2018-02-08');
 
-    if ($response->order !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->orders->get(
+    orderId: '<id>',
+    shippoApiVersion: '2018-02-08'
+
+);
+
+if ($response->order !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `orderId`                                            | *string*                                             | :heavy_check_mark:                                   | Object ID of the order                               |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `orderId`                                                                                                                                                          | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the order                                                                                                                                             |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetOrderResponse](../../Models/Operations/GetOrderResponse.md)**
+**[?Operations\GetOrderResponse](../../Models/Operations/GetOrderResponse.md)**
 
+### Errors
+
+| Error Type          | Status Code         | Content Type        |
+| ------------------- | ------------------- | ------------------- |
+| Errors\SDKException | 4XX, 5XX            | \*/\*               |
