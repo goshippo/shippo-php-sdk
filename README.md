@@ -34,26 +34,9 @@ Shippo external API.: Use this API to integrate with the Shippo service
 
 The SDK relies on [Composer](https://getcomposer.org/) to manage its dependencies.
 
-To install the SDK first add the below to your `composer.json` file:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "github",
-            "url": "<UNSET>.git"
-        }
-    ],
-    "require": {
-        "Shippo": "*"
-    }
-}
-```
-
-Then run the following command:
-
+To install the SDK and add it as a dependency to an existing `composer.json` file:
 ```bash
-composer update
+composer require "shippo/shippo-php"
 ```
 <!-- End SDK Installation [installation] -->
 
