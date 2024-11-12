@@ -1,7 +1,4 @@
 name: Validate
-permissions:
-  contents: write
-  id-token: write
 
 on:
   pull_request:
