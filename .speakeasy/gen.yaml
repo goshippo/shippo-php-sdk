@@ -19,7 +19,7 @@ info:
   version: ""
   description: Packagist library which integrates with Shippo Multi Carrier Shipping API. This library provides access to Shippo (goshippo.com) API capabilities. Including label generation, rating, tracking and more.
 php:
-  version: 3.0.0-beta.1
+  version: 3.0.0-alpha
   author: Shippo
   clientServerStatusCodesAsErrors: true
   defaultErrorName: SDKError
