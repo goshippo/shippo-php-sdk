@@ -6,7 +6,7 @@ check: test
 clean:
 	php composer.phar clear-cache
 	rm -rf vendor/
-	rm composer.lock
+	rm -f composer.lock
 
 install:
 	php composer.phar install
