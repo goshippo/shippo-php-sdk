@@ -20,13 +20,13 @@ jobs:
       group: php-sdk-check
     steps:
       - name: Check if secret exists
-          run: |
-            if [ -z "${{ secrets.SHIPPO_TOKEN }}" ]; then
-              echo "SHIPPO_TOKEN does not exist"
-              exit 1
-            else
-              echo "SHIPPO_TOKEN exists"
-            fi
+        run: |
+          if [ -z "${{ secrets.SHIPPO_TOKEN }}" ]; then
+            echo "SHIPPO_TOKEN does not exist"
+            exit 1
+          else
+            echo "SHIPPO_TOKEN exists"
+          fi
       - name: Check out repository
         uses: actions/checkout@v4
 
