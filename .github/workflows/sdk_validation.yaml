@@ -16,8 +16,6 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    env:
-      SHIPPO_TOKEN: ${{ secrets.SHIPPO_TOKEN }}
     concurrency:
       group: php-sdk-check
     steps:
@@ -42,3 +40,5 @@ jobs:
 
       - name: Check
         run: make check 
+        env:
+          SHIPPO_TOKEN: ${{ secrets.SHIPPO_TOKEN }}
