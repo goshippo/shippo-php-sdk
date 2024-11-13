@@ -130,6 +130,7 @@ final class PurchaseLabelTest extends IntegrationTestCase
         ];
         $transactionCreateResponse = $this->getSdk()->transactions->create($transactionCreateRequest);
         $this->assertNotNull($transactionCreateResponse->transaction);
+        $this->assertEquals(201, $transactionCreateResponse->statusCode);
         $transaction = $transactionCreateResponse->transaction;
         $this->assertInstanceOf(Transaction::class, $transaction);
         $this->assertIsString($transaction->rate);
