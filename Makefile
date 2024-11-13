@@ -3,6 +3,11 @@ LOCAL_SPEC_FILE=${BUILD_DIR}public-api.yaml
 
 check: test
 
+clean:
+	php composer.phar clear-cache
+	rm -rf vendor/
+	rm composer.lock
+
 install:
 	php composer.phar install
 
