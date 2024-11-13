@@ -16,24 +16,11 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      SHIPPO_TOKEN: ${{ secrets.SHIPPO_TOKEN }}
     concurrency:
       group: php-sdk-check
     steps:
-      - name: Authenticate with AWS
-        uses: goshippo/shippo-action-workflows/.github/actions/aws_auth@v1.1.0
-        with:
-          environment: dev-main
-          oidc-name: shippo-php-sdk-pipeline
-          login-to-ecr: false
-
-      - name: Get Speakeasy Secrets Manager
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
-        with:
-          secret-ids: |
-            dev-main-speakeasy-api-key
-          name-transformation: uppercase
-          parse-json-secrets: true
-
       - name: Check out repository
         uses: actions/checkout@v4
 
@@ -55,5 +42,3 @@ jobs:
 
       - name: Check
         run: make check 
-        env:
-          SHIPPO_TOKEN: ${{ env.DEV_MAIN_SPEAKEASY_API_KEY_SHIPPO_TOKEN }}
