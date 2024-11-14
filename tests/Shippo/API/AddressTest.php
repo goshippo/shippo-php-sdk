@@ -21,7 +21,6 @@ final class AddressTest extends TestCase
             page: 1,
             results: 10,
             shippoApiVersion: '2018-02-08'
-
         );
 
         $this->assertNotNull($response->results);
