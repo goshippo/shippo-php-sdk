@@ -10,8 +10,8 @@ namespace Shippo\API;
 
 
 
-/** Shippo - Shippo external API.: Use this API to integrate with the Shippo service */
-class Shippo
+/** ShippoSDK - Shippo external API.: Use this API to integrate with the Shippo service */
+class ShippoSDK
 {
     public const SERVERS = [
         'https://api.goshippo.com',
@@ -265,11 +265,11 @@ class Shippo
     /**
      * Returns a new instance of the SDK builder used to configure and create the SDK instance.
      *
-     * @return ShippoBuilder
+     * @return ShippoSDKBuilder
      */
-    public static function builder(): ShippoBuilder
+    public static function builder(): ShippoSDKBuilder
     {
-        return new ShippoBuilder();
+        return new ShippoSDKBuilder();
     }
 
     /**

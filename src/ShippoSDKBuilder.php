@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Shippo\API;
 
 /**
- * ShippoBuilder is used to configure and build an instance of the SDK.
+ * ShippoSDKBuilder is used to configure and build an instance of the SDK.
  */
-class ShippoBuilder
+class ShippoSDKBuilder
 {
     public function __construct(
         private SDKConfiguration $sdkConfig = new SDKConfiguration(),
@@ -22,9 +22,9 @@ class ShippoBuilder
      * setClient allows setting a custom Guzzle client for the SDK to make requests with.
      *
      * @param  \GuzzleHttp\ClientInterface  $client
-     * @return ShippoBuilder
+     * @return ShippoSDKBuilder
      */
-    public function setClient(\GuzzleHttp\ClientInterface $client): ShippoBuilder
+    public function setClient(\GuzzleHttp\ClientInterface $client): ShippoSDKBuilder
     {
         $this->sdkConfig->defaultClient = $client;
 
@@ -35,9 +35,9 @@ class ShippoBuilder
      * setSecurity is used to configure the security required for the SDK.
      *
      * @param  string  $apiKeyHeader
-     * @return ShippoBuilder
+     * @return ShippoSDKBuilder
      */
-    public function setSecurity(string $apiKeyHeader): ShippoBuilder
+    public function setSecurity(string $apiKeyHeader): ShippoSDKBuilder
     {
         $security = new Models\Components\Security(
             apiKeyHeader: $apiKeyHeader
@@ -52,9 +52,9 @@ class ShippoBuilder
      * unlike setSecurity, setSecuritySource accepts a closure that will be called to retrieve the security information.
      *
      * @param  pure-Closure(): string  $securitySource
-     * @return ShippoBuilder
+     * @return ShippoSDKBuilder
      */
-    public function setSecuritySource(\Closure $securitySource): ShippoBuilder
+    public function setSecuritySource(\Closure $securitySource): ShippoSDKBuilder
     {
         $this->sdkConfig->securitySource = $securitySource;
 
@@ -66,9 +66,9 @@ class ShippoBuilder
      *
      * @param  string  $serverUrl
      * @param  array<string, string>  $params
-     * @return ShippoBuilder
+     * @return ShippoSDKBuilder
      */
-    public function setServerUrl(string $serverUrl, ?array $params = null): ShippoBuilder
+    public function setServerUrl(string $serverUrl, ?array $params = null): ShippoSDKBuilder
     {
         $this->sdkConfig->serverUrl = Utils\Utils::templateUrl($serverUrl, $params);
 
@@ -79,9 +79,9 @@ class ShippoBuilder
      * setServer is used to configure the server for the SDK
      *
      * @param  int  $serverIdx
-     * @return ShippoBuilder
+     * @return ShippoSDKBuilder
      */
-    public function setServerIndex(int $serverIdx): ShippoBuilder
+    public function setServerIndex(int $serverIdx): ShippoSDKBuilder
     {
         $this->sdkConfig->serverIndex = $serverIdx;
 
@@ -91,9 +91,9 @@ class ShippoBuilder
      * setSHIPPOAPIVERSION is used to configure the SHIPPO-API-VERSION parameter for the SDK.
      *
      * @param  string  $shippoApiVersion
-     * @return ShippoBuilder
+     * @return ShippoSDKBuilder
      */
-    public function setSHIPPOAPIVERSION(string $shippoApiVersion): ShippoBuilder
+    public function setSHIPPOAPIVERSION(string $shippoApiVersion): ShippoSDKBuilder
     {
         if (! array_key_exists('header', $this->sdkConfig->globals['parameters'])) {
             $this->sdkConfig->globals['parameters']['header'] = [];
@@ -107,9 +107,9 @@ class ShippoBuilder
     /**
      * build is used to build the SDK with any of the configured options.
      *
-     * @return Shippo
+     * @return ShippoSDK
      */
-    public function build(): Shippo
+    public function build(): ShippoSDK
     {
         if ($this->sdkConfig->defaultClient === null) {
             $this->sdkConfig->defaultClient = new \GuzzleHttp\Client([
@@ -123,6 +123,6 @@ class ShippoBuilder
             $this->sdkConfig->securityClient = $this->sdkConfig->defaultClient;
         }
 
-        return new Shippo($this->sdkConfig);
+        return new ShippoSDK($this->sdkConfig);
     }
 }

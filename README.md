@@ -54,7 +54,7 @@ use Shippo\API;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
@@ -175,13 +175,13 @@ if ($response->addressPaginatedList !== null) {
 * [create](docs/sdks/shipments/README.md#create) - Create a new shipment
 * [get](docs/sdks/shipments/README.md#get) - Retrieve a shipment
 
-
 ### [shippoAccounts](docs/sdks/shippoaccounts/README.md)
 
 * [list](docs/sdks/shippoaccounts/README.md#list) - List all Shippo Accounts
 * [create](docs/sdks/shippoaccounts/README.md#create) - Create a Shippo Account
 * [get](docs/sdks/shippoaccounts/README.md#get) - Retrieve a Shippo Account
 * [update](docs/sdks/shippoaccounts/README.md#update) - Update a Shippo Account
+
 
 ### [trackingStatus](docs/sdks/trackingstatus/README.md)
 
@@ -248,7 +248,7 @@ use Shippo\API\Models\Operations;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
@@ -296,7 +296,7 @@ use Shippo\API;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setServerURL("https://api.goshippo.com")
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();

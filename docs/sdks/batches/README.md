@@ -38,7 +38,7 @@ use Shippo\API\Models\Components;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
@@ -251,7 +251,7 @@ use Shippo\API;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
@@ -301,7 +301,7 @@ use Shippo\API\Models\Components;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
@@ -513,7 +513,7 @@ use Shippo\API;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
@@ -562,7 +562,7 @@ use Shippo\API;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 

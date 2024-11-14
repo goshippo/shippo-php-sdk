@@ -24,6 +24,9 @@ namespace Shippo\API\Models\Components;
  * | canada_post_small_packet_usa_air | Small Packet USA Air|
  * | canada_post_tracked_packet_international | Tracked Packet International|
  * | canada_post_small_packet_international_air | Small Package International Air|
+ * | canada_post_small_packet_international_surface  | Small Packet International Surface
+ * | canada_post_international_parcel_surface  | International Parcel Surface
+ * | canada_post_international_parcel_air  | International Parcel Air
  *
  */
 enum ServiceLevelCanadaPostEnum: string
@@ -39,4 +42,7 @@ enum ServiceLevelCanadaPostEnum: string
     case CanadaPostSmallPacketUsaAir = 'canada_post_small_packet_usa_air';
     case CanadaPostTrackedPacketInternational = 'canada_post_tracked_packet_international';
     case CanadaPostSmallPacketInternationalAir = 'canada_post_small_packet_international_air';
+    case CanadaPostSmallPacketInternationalSurface = 'canada_post_small_packet_international_surface';
+    case CanadaPostInternationalParcelSurface = 'canada_post_international_parcel_surface';
+    case CanadaPostInternationalParcelAir = 'canada_post_international_parcel_air';
 }

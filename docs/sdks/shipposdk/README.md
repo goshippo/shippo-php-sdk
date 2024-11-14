@@ -1,4 +1,4 @@
-# Shippo SDK
+# ShippoSDK
 
 ## Overview
 

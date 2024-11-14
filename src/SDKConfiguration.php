@@ -27,11 +27,11 @@ class SDKConfiguration
 
     public string $openapiDocVersion = '2018-02-08';
 
-    public string $sdkVersion = '3.0.0-alpha';
+    public string $sdkVersion = '3.0.0-alpha.1';
 
-    public string $genVersion = '2.457.2';
+    public string $genVersion = '2.457.9';
 
-    public string $userAgent = 'speakeasy-sdk/php 3.0.0-alpha 2.457.2 2018-02-08 shippo/shippo-php';
+    public string $userAgent = 'speakeasy-sdk/php 3.0.0-alpha.1 2.457.9 2018-02-08 shippo/shippo-php';
     /** @var array<string, array<string, array<string, mixed>>> */
     public ?array $globals = [
         'parameters' => [],
@@ -44,8 +44,8 @@ class SDKConfiguration
             return $this->serverUrl;
         }
 
-        if (isset(Shippo::SERVERS[$this->serverIndex])) {
-            return Shippo::SERVERS[$this->serverIndex];
+        if (isset(ShippoSDK::SERVERS[$this->serverIndex])) {
+            return ShippoSDK::SERVERS[$this->serverIndex];
         } else {
             throw new \OutOfBoundsException('Server index '.$this->serverIndex.' is out of bounds');
         }

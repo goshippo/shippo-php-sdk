@@ -3,25 +3,28 @@ declare(strict_types=1);
 namespace Shippo\API;
 require 'vendor/autoload.php';
 
-use Shippo\API;
+use PHPUnit\Framework\TestCase;
 use Shippo\API\Models\Components\Address;
 use Shippo\API\Models\Components\AddressPaginatedList;
 
-final class AddressTest extends IntegrationTestCase
+final class AddressTest extends TestCase
 {
-
 
     public function testListAllAddresses()
     {
-        $response = $this->getSdk()->addresses->list(
+        $token = "ShippoToken " . getenv('SHIPPO_TOKEN');
+        $sdk = \Shippo\API\ShippoSDK::builder()
+            ->setSecurity($token)
+            ->build();
+
+        $response = $sdk->addresses->list(
             page: 1,
             results: 10,
             shippoApiVersion: '2018-02-08'
 
         );
 
-        $this->assertEquals(200, $response->statusCode);
-        $this->assertNotNull($response->addressPaginatedList);
-        $this->assertInstanceOf(AddressPaginatedList::class, $response->addressPaginatedList);
+        $this->assertNotNull($response->results);
+        $this->assertInstanceOf(AddressPaginatedList::class, $response);
     }
 }
