@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d2c565ec-fb4a-439c-9a3b-933775ea113a" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/sdk_validation.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/sdk_validation.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,11 +87,13 @@
     "PHPUnit.PurchaseLabelTest.executor": "Run",
     "PHPUnit.PurchaseLabelTest.testPurchaseLabelUsingReferenceIds.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "git-widget-placeholder": "speakeasy-sdk-regen-1731434842",
     "go.import.settings.migrated": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/Users/mike.lueders/dev/shippo-php-sdk/tests",
+    "last_opened_file_path": "/Users/randallkeur/Projects/shippo-php-sdk",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -108,7 +111,16 @@
       <recent name="$PROJECT_DIR$/tests" />
     </key>
   </component>
-  <component name="RunManager" selected="PHPUnit.PurchaseLabelTest">
+  <component name="RunManager">
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <CommandLine>
+        <envs>
+          <env name="SHIPPO_TOKEN" value="shippo_test_10963b6f9478e131e57b59c2534850eabca4e943" />
+        </envs>
+      </CommandLine>
+      <TestRunner />
+      <method v="2" />
+    </configuration>
     <configuration name="test" type="ComposerRunConfigurationType" factoryName="Composer Script" temporary="true">
       <option name="pathToComposerJson" value="$PROJECT_DIR$/composer.json" />
       <option name="script" value="test" />
@@ -123,35 +135,15 @@
       <TestRunner class="PurchaseLabelTest" configuration_file="$PROJECT_DIR$/phpunit.xml" file="$PROJECT_DIR$/tests/PurchaseLabelTest.php" scope="Class" />
       <method v="2" />
     </configuration>
-    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
-      <CommandLine>
-        <envs>
-          <env name="SHIPPO_TOKEN" value="shippo_test_10963b6f9478e131e57b59c2534850eabca4e943" />
-        </envs>
-      </CommandLine>
-      <TestRunner />
-      <method v="2" />
-    </configuration>
     <configuration name="ShippoSDK.php" type="PhpLocalRunConfigurationType" factoryName="PHP Console" temporary="true" path="$PROJECT_DIR$/src/ShippoSDK.php">
       <method v="2" />
     </configuration>
-    <list>
-      <item itemvalue="Composer Script.test" />
-      <item itemvalue="PHP Script.ShippoSDK.php" />
-      <item itemvalue="PHPUnit.PurchaseLabelTest" />
-    </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Composer Script.test" />
-        <item itemvalue="PHP Script.ShippoSDK.php" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.21565.193" />
+        <option value="bundled-js-predefined-d6986cc7102b-e768b9ed790e-JavaScript-IU-243.21565.193" />
       </set>
     </attachedChunks>
   </component>
@@ -165,6 +157,7 @@
       <updated>1718647319602</updated>
       <workItem from="1718647320671" duration="9561000" />
       <workItem from="1718723618997" duration="15806000" />
+      <workItem from="1731594402822" duration="56000" />
     </task>
     <servers />
   </component>
