@@ -87,12 +87,12 @@ final class PurchaseInstalabelTest extends TestCase
             shipment: $shipmentCreateRequest
             );
 
-        # Throws 'API error occurred' error
+        //Throws 'API error occurred' error
         $response = $sdk->transactions->create($instantTransactionCreateRequest);
-        #$this->assertNotNull($response->transaction);
-        #$transaction = $response->transaction;
-        #$this->assertInstanceOf(Transaction::class, $transaction);
-        #$this->assertNotNull($transaction->rate->objectId);
+        //$this->assertNotNull($response->transaction);
+        //$transaction = $response->transaction;
+        //$this->assertInstanceOf(Transaction::class, $transaction);
+        //$this->assertNotNull($transaction->rate->objectId);
     }
 
 }
