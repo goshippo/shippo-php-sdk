@@ -34,26 +34,9 @@ Shippo external API.: Use this API to integrate with the Shippo service
 
 The SDK relies on [Composer](https://getcomposer.org/) to manage its dependencies.
 
-To install the SDK first add the below to your `composer.json` file:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "github",
-            "url": "<UNSET>.git"
-        }
-    ],
-    "require": {
-        "Shippo": "*"
-    }
-}
-```
-
-Then run the following command:
-
+To install the SDK and add it as a dependency to an existing `composer.json` file:
 ```bash
-composer update
+composer require "shippo/shippo-php"
 ```
 <!-- End SDK Installation [installation] -->
 
@@ -71,7 +54,7 @@ use Shippo\API;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
@@ -192,13 +175,13 @@ if ($response->addressPaginatedList !== null) {
 * [create](docs/sdks/shipments/README.md#create) - Create a new shipment
 * [get](docs/sdks/shipments/README.md#get) - Retrieve a shipment
 
-
 ### [shippoAccounts](docs/sdks/shippoaccounts/README.md)
 
 * [list](docs/sdks/shippoaccounts/README.md#list) - List all Shippo Accounts
 * [create](docs/sdks/shippoaccounts/README.md#create) - Create a Shippo Account
 * [get](docs/sdks/shippoaccounts/README.md#get) - Retrieve a Shippo Account
 * [update](docs/sdks/shippoaccounts/README.md#update) - Update a Shippo Account
+
 
 ### [trackingStatus](docs/sdks/trackingstatus/README.md)
 
@@ -265,7 +248,7 @@ use Shippo\API\Models\Operations;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
@@ -313,7 +296,7 @@ use Shippo\API;
 
 $security = '<YOUR_API_KEY_HERE>';
 
-$sdk = API\Shippo::builder()
+$sdk = API\ShippoSDK::builder()
     ->setServerURL("https://api.goshippo.com")
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();

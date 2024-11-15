@@ -1,6 +1,6 @@
 configVersion: 2.0.0
 generation:
-  sdkClassName: Shippo
+  sdkClassName: ShippoSDK
   maintainOpenAPIOrder: true
   usageSnippets:
     optionalPropertyRendering: withExample
@@ -39,6 +39,7 @@ php:
     svcName: openapi
   license: MIT License
   maxMethodParams: 3
+  methodArguments: infer-optional-args
   namespace: Shippo\API
   outputModelSuffix: output
   packageName: shippo/shippo-php
