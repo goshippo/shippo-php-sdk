@@ -4,9 +4,7 @@ namespace Shippo\API;
 require 'vendor/autoload.php';
 
 use PHPUnit\Framework\TestCase;
-use Shippo\API\Models\Components\Address;
-use Shippo\API\Models\Components\AddressCreateRequest;
-use Shippo\API\Models\Components\AddressPaginatedList;
+use Shippo\API\Models\Components;
 
 final class AddressTest extends TestCase
 {
@@ -25,7 +23,7 @@ final class AddressTest extends TestCase
         );
 
         $this->assertNotNull($response->results);
-        $this->assertInstanceOf(AddressPaginatedList::class, $response);
+        $this->assertInstanceOf(Components\AddressPaginatedList::class, $response);
     }
 
     public function testCreateAddress()
@@ -35,20 +33,20 @@ final class AddressTest extends TestCase
             ->setSecurity($token)
             ->build();
 
-        $addressCreateRequest = new AddressCreateRequest(
-            name: 'Shwan Ippotle',
-            company: 'Shippo',
-            street1: '215 Clayton St.',
+        $addressCreateRequest = new Components\AddressCreateRequest(
+            name: 'Rachael',
+            company: '',
+            street1: '1092 Indian Summer Ct',
             street3: '',
             streetNo: '',
-            city: 'San Francisco',
+            city: 'San Jose',
             state: 'CA',
-            zip: '94117',
+            zip: '95122',
             country: 'US',
-            phone: '+1 555 341 9393',
-            email: 'shippotle@shippo.com',
+            phone: '+1 415 987 6543',
+            email: 'rachael@alltheyarnz.com',
             isResidential: true,
-            metadata: 'Customer ID 123456',
+            metadata: '',
             validate: true,
         );
 
@@ -58,6 +56,6 @@ final class AddressTest extends TestCase
         );
 
         $this->assertNotNull($response);
-        $this->assertInstanceOf(Address::class, $response);
+        $this->assertInstanceOf(Components\Address::class, $response);
     }
 }

@@ -129,6 +129,8 @@ class Shipments
             }
             throw new \Shippo\API\Models\Errors\SDKError('Unknown content type received', $statusCode, $httpResponse->getBody()->getContents(), $httpResponse);
         } elseif ($statusCode == 400 || $statusCode >= 400 && $statusCode < 500 || $statusCode >= 500 && $statusCode < 600) {
+            var_dump($statusCode);
+            var_dump($httpResponse->getBody()->getContents());
             throw new \Shippo\API\Models\Errors\SDKError('API error occurred', $statusCode, $httpResponse->getBody()->getContents(), $httpResponse);
         } else {
             throw new \Shippo\API\Models\Errors\SDKError('Unknown status code received', $statusCode, $httpResponse->getBody()->getContents(), $httpResponse);
