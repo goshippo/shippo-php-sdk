@@ -78,7 +78,7 @@ final class PurchaseLabelTest extends TestCase
             );
 
         //Throws 'API error occurred' error
-        $shipmentResponse = $sdk->shipments->create($shipmentCreateRequest);
+        $shipmentResponse = $sdk->shipments->create($shipmentCreateRequest, "2018-02-08");
         //var_dump($shipmentResponse);
 
 

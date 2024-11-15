@@ -11,12 +11,18 @@ this field will be a simplified Rate object in the Transaction model returned fr
 ### `Components\CoreRate`
 
 ```php
+/**
+* @var Components\CoreRate
+*/
 Components\CoreRate $value = /* values here */
 ```
 
 ### `string`
 
 ```php
+/**
+* @var string
+*/
 string $value = /* values here */
 ```
 

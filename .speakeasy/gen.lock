@@ -3,10 +3,10 @@ id: 32d162bd-5d3c-4bae-bce8-143fcab0e56e
 management:
   docChecksum: 52cef2a60d39b3cba88408f87a6c0998
   docVersion: "2018-02-08"
-  speakeasyVersion: 1.439.0
-  generationVersion: 2.457.9
-  releaseVersion: 3.0.0-alpha.1
-  configChecksum: 8e636c00c49527e7d399281940b5b9dd
+  speakeasyVersion: 1.440.1
+  generationVersion: 2.460.1
+  releaseVersion: 3.0.0-alpha
+  configChecksum: 7a1a3c32862dbf9bdd7c7b84e0b97e1b
   repoURL: https://github.com/goshippo/shippo-php-sdk.git
   installationURL: https://github.com/goshippo/shippo-php-sdk
   published: true

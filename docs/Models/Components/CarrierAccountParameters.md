@@ -3,21 +3,30 @@
 
 ## Supported Types
 
-### `array<string, mixed>`
+### `array`
 
 ```php
-array<string, mixed> $value = /* values here */
+/**
+* @var array<string, mixed>
+*/
+array $value = /* values here */
 ```
 
 ### `Components\FedExConnectExistingOwnAccountParameters`
 
 ```php
+/**
+* @var Components\FedExConnectExistingOwnAccountParameters
+*/
 Components\FedExConnectExistingOwnAccountParameters $value = /* values here */
 ```
 
 ### `Components\UPSConnectExistingOwnAccountParameters`
 
 ```php
+/**
+* @var Components\UPSConnectExistingOwnAccountParameters
+*/
 Components\UPSConnectExistingOwnAccountParameters $value = /* values here */
 ```
 

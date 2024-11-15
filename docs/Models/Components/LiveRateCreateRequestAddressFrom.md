@@ -10,12 +10,18 @@ any address element, especially name, company, and email.
 ### `string`
 
 ```php
+/**
+* @var string
+*/
 string $value = /* values here */
 ```
 
 ### `Components\AddressCompleteCreateRequest`
 
 ```php
+/**
+* @var Components\AddressCompleteCreateRequest
+*/
 Components\AddressCompleteCreateRequest $value = /* values here */
 ```
 
