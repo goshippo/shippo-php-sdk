@@ -21,12 +21,18 @@ Shippo external API.: Use this API to integrate with the Shippo service
 
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
+<!-- $toc-max-depth=2 -->
+* [<img src="https://docs.goshippo.com/images/Logo.png" width="30" alt="Shippo logo"> Shippo PHP SDK](#img-srchttpsdocsgoshippocomimageslogopng-width30-altshippo-logo-shippo-php-sdk)
+  * [SDK Installation](#sdk-installation)
+  * [SDK Example Usage](#sdk-example-usage)
+  * [Available Resources and Operations](#available-resources-and-operations)
+  * [Error Handling](#error-handling)
+  * [Server Selection](#server-selection)
+* [Development](#development)
+  * [Maturity](#maturity)
+  * [Contributions](#contributions)
+  * [About Shippo](#about-shippo)
 
-* [SDK Installation](#sdk-installation)
-* [SDK Example Usage](#sdk-example-usage)
-* [Available Resources and Operations](#available-resources-and-operations)
-* [Error Handling](#error-handling)
-* [Server Selection](#server-selection)
 <!-- End Table of Contents [toc] -->
 
 <!-- Start SDK Installation [installation] -->
@@ -34,26 +40,9 @@ Shippo external API.: Use this API to integrate with the Shippo service
 
 The SDK relies on [Composer](https://getcomposer.org/) to manage its dependencies.
 
-To install the SDK first add the below to your `composer.json` file:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "github",
-            "url": "<UNSET>.git"
-        }
-    ],
-    "require": {
-        "Shippo": "*"
-    }
-}
-```
-
-Then run the following command:
-
+To install the SDK and add it as a dependency to an existing `composer.json` file:
 ```bash
-composer update
+composer require "shippo/shippo-php"
 ```
 <!-- End SDK Installation [installation] -->
 
@@ -68,23 +57,19 @@ declare(strict_types=1);
 require 'vendor/autoload.php';
 
 use Shippo\API;
-
-$security = '<YOUR_API_KEY_HERE>';
+use Shippo\API\Models\Components;
 
 $sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->build();
 
+$request = new Components\WebhookPayloadBatch();
 
-
-$response = $sdk->addresses->list(
-    page: 1,
-    results: 5,
-    shippoApiVersion: '2018-02-08'
-
+$response = $sdk->batch(
+    request: $request
 );
 
-if ($response->addressPaginatedList !== null) {
+if ($response->statusCode === 200) {
     // handle response
 }
 ```
@@ -314,7 +299,7 @@ use Shippo\API;
 $security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\Shippo::builder()
-    ->setServerURL("https://api.goshippo.com")
+    ->setServerURL('https://api.goshippo.com')
     ->setShippoApiVersion('2018-02-08')
     ->setSecurity($security)->build();
 
