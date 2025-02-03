@@ -1,18 +1,26 @@
-speakeasyVersion: 1.310.0
+speakeasyVersion: 1.481.1
 sources:
     openapi:
         sourceNamespace: openapi
-        sourceRevisionDigest: sha256:3099fc4c926ab05099ea5c4cbb918e6423a03874cea38c8791efa7efbe6c5706
-        sourceBlobDigest: sha256:234f83b39101f22af624857db75abc2440fbe9c279d457ab0a7c8a393245cab1
+        sourceRevisionDigest: sha256:051dd576d2381bf298c594aeb909de34a53c4efd09a2b81acc46a5cfb401efb0
+        sourceBlobDigest: sha256:9331910575a380f9073bf9d31fb81996067da3d0ee449b0513dbe10790790b37
         tags:
             - latest
+            - speakeasy-sdk-regen-1731434842
+            - "2018-02-08"
 targets:
     my-first-target:
         source: openapi
         sourceNamespace: openapi
         sourceRevisionDigest: sha256:3099fc4c926ab05099ea5c4cbb918e6423a03874cea38c8791efa7efbe6c5706
         sourceBlobDigest: sha256:234f83b39101f22af624857db75abc2440fbe9c279d457ab0a7c8a393245cab1
-        outLocation: /Users/mike.lueders/dev/shippo-php-sdk
+    php:
+        source: openapi
+        sourceNamespace: openapi
+        sourceRevisionDigest: sha256:051dd576d2381bf298c594aeb909de34a53c4efd09a2b81acc46a5cfb401efb0
+        sourceBlobDigest: sha256:9331910575a380f9073bf9d31fb81996067da3d0ee449b0513dbe10790790b37
+        codeSamplesNamespace: openapi-php-code-samples
+        codeSamplesRevisionDigest: sha256:5ad1d12f65a8124a4c58ab22be38d4cb6fdbdc4ecf13ee377236ab626f0a1d1f
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -23,6 +31,16 @@ workflow:
             registry:
                 location: registry.speakeasyapi.dev/shippo/shippo/openapi
     targets:
-        my-first-target:
+        php:
             target: php
             source: openapi
+            publish:
+                packagist:
+                    username: tech@shippo.com
+                    token: $packagist_token
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/shippo/shippo/openapi-php-code-samples
+                labelOverride:
+                    fixedValue: Php (SDK)
+                blocking: false
