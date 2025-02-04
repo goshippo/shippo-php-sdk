@@ -6,6 +6,11 @@
       "Shippo\\API\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+        "Shippo\\API\\": "tests/Shippo/API/"
+    }
+},
   "license": "MIT",
   "require": {
     "php": "^8.2",
