@@ -4,6 +4,7 @@
 namespace Shippo\API;
 
 use PHPUnit\Framework\TestCase;
+use Shippo\API\Shippo;
 use Shippo\API\Models\Components\CarrierAccountWithExtraInfo;
 use Shippo\API\Models\Components\CarriersEnum;
 use Shippo\API\Models\Operations\ListCarrierAccountsRequest;
@@ -12,20 +13,21 @@ use Shippo\API\Models\Operations\ListCarrierAccountsRequest;
 class IntegrationTestCase extends TestCase
 {
 
-    private static ?ShippoSDK $sdk = null;
+    private static ?Shippo $sdk = null;
 
     public static function setUpBeforeClass(): void
     {
         if (self::$sdk == null) {
             $token = 'ShippoToken ' . getenv('SHIPPO_TOKEN');
-//            $security = new Security();
-//            $security->apiKeyHeader = $token;
 
-            self::$sdk = ShippoSDK::builder()->setSecurity($token)->build();
+            self::$sdk = Shippo::builder()
+            ->setSecurity($token)
+            ->setShippoApiVersion('2018-02-08')
+            ->build();
         }
     }
 
-    public function getSdk(): ShippoSDK
+    public function getSdk(): Shippo
     {
         return self::$sdk;
     }
