@@ -1,5 +1,5 @@
 # Pickups
-
+(*pickups*)
 
 ## Overview
 
@@ -18,72 +18,75 @@ Creates a pickup object. This request is for a carrier to come to a specified lo
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
+use Shippo\API\Utils;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->build();
 
-try {
-        $pickupBase = new Components\PickupBase();
-    $pickupBase->carrierAccount = 'adcfdddf8ec64b84ad22772bce3ea37a';
-    $pickupBase->location = new Components\Location();
-    $pickupBase->location->address = new Components\AddressCompleteCreateRequest();
-    $pickupBase->location->address->name = 'Shwan Ippotle';
-    $pickupBase->location->address->company = 'Shippo';
-    $pickupBase->location->address->street1 = '215 Clayton St.';
-    $pickupBase->location->address->street2 = '<value>';
-    $pickupBase->location->address->street3 = '';
-    $pickupBase->location->address->streetNo = '';
-    $pickupBase->location->address->city = 'San Francisco';
-    $pickupBase->location->address->state = 'CA';
-    $pickupBase->location->address->zip = '94117';
-    $pickupBase->location->address->country = 'US';
-    $pickupBase->location->address->phone = '+1 555 341 9393';
-    $pickupBase->location->address->email = 'shippotle@shippo.com';
-    $pickupBase->location->address->isResidential = true;
-    $pickupBase->location->address->metadata = 'Customer ID 123456';
-    $pickupBase->location->address->validate = true;
-    $pickupBase->location->buildingLocationType = Components\BuildingLocationType::FrontDoor;
-    $pickupBase->location->buildingType = Components\BuildingType::Apartment;
-    $pickupBase->location->instructions = 'Behind screen door';
-    $pickupBase->metadata = '<value>';
-    $pickupBase->requestedEndTime = DateTime::createFromFormat('Y-m-d\TH:i:s+', '2023-06-18T07:14:55.676Z');
-    $pickupBase->requestedStartTime = DateTime::createFromFormat('Y-m-d\TH:i:s+', '2023-06-21T08:42:38.998Z');
-    $pickupBase->transactions = [
-        '<value>',
-    ];
+$pickupBase = new Components\PickupBase(
+    carrierAccount: 'adcfdddf8ec64b84ad22772bce3ea37a',
+    location: new Components\Location(
+        address: new Components\AddressCompleteCreateRequest(
+            name: 'Shwan Ippotle',
+            street1: '215 Clayton St.',
+            city: 'San Francisco',
+            state: 'CA',
+            zip: '94117',
+            country: 'US',
+            company: 'Shippo',
+            street3: '',
+            streetNo: '',
+            phone: '+1 555 341 9393',
+            email: 'shippotle@shippo.com',
+            isResidential: true,
+            metadata: 'Customer ID 123456',
+            validate: true,
+        ),
+        buildingLocationType: Components\BuildingLocationType::FrontDoor,
+        buildingType: Components\BuildingType::Apartment,
+        instructions: 'Behind screen door',
+    ),
+    requestedEndTime: Utils\Utils::parseDateTime('2024-06-17T07:14:55.338Z'),
+    requestedStartTime: Utils\Utils::parseDateTime('2024-11-30T17:06:07.804Z'),
+    transactions: [
+        'adcfdddf8ec64b84ad22772bce3ea37a',
+    ],
+);
 
-    $response = $sdk->pickups->create($pickupBase, '2018-02-08');
+$response = $sdk->pickups->create(
+    pickupBase: $pickupBase,
+    shippoApiVersion: '2018-02-08'
 
-    if ($response->pickup !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->pickup !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                                                | Type                                                                                                                                     | Required                                                                                                                                 | Description                                                                                                                              | Example                                                                                                                                  |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| `pickupBase`                                                                                                                             | [\Shippo\API\Models\Components\PickupBase](../../Models/Components/PickupBase.md)                                                        | :heavy_check_mark:                                                                                                                       | Shippo’s pickups endpoint allows you to schedule pickups with USPS and DHL Express for eligible shipments that you have already created. |                                                                                                                                          |
-| `shippoApiVersion`                                                                                                                       | *string*                                                                                                                                 | :heavy_minus_sign:                                                                                                                       | String used to pick a non-default API version to use                                                                                     | 2018-02-08                                                                                                                               |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pickupBase`                                                                                                                                                       | [Components\PickupBase](../../Models/Components/PickupBase.md)                                                                                                     | :heavy_check_mark:                                                                                                                                                 | Shippo’s pickups endpoint allows you to schedule pickups with USPS and DHL Express for eligible shipments that you have already created.                           |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreatePickupResponse](../../Models/Operations/CreatePickupResponse.md)**
+**[?Components\Pickup](../../Models/Components/Pickup.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
