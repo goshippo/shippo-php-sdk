@@ -1,5 +1,5 @@
 # UserParcelTemplates
-
+(*userParcelTemplates*)
 
 ## Overview
 
@@ -13,60 +13,11 @@ the carrier presets, but the weight can be configured by you.
 
 ### Available Operations
 
-* [list](#list) - List all user parcel templates
 * [create](#create) - Create a new user parcel template
 * [delete](#delete) - Delete a user parcel template
 * [get](#get) - Retrieves a user parcel template
+* [list](#list) - List all user parcel templates
 * [update](#update) - Update an existing user parcel template
-
-## list
-
-Returns a list all of all user parcel template objects.
-
-### Example Usage
-
-```php
-<?php
-
-declare(strict_types=1);
-
-require 'vendor/autoload.php';
-
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
-
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
-    ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
-
-try {
-    
-
-    $response = $sdk->userParcelTemplates->list('2018-02-08');
-
-    if ($response->userParcelTemplateList !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
-}
-```
-
-### Parameters
-
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
-
-### Response
-
-**[?\Shippo\API\Models\Operations\ListUserParcelTemplatesResponse](../../Models/Operations/ListUserParcelTemplatesResponse.md)**
-
 
 ## create
 
@@ -81,48 +32,52 @@ and depth, as well as their units."
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->build();
 
-try {
-    
 
-    $response = $sdk->userParcelTemplates->create('<value>', '2018-02-08');
 
-    if ($response->userParcelTemplate !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->userParcelTemplates->create(
+    userParcelTemplateCreateRequest: new Components\UserParcelTemplateWithCarrierTemplateCreateRequest(
+        weight: '12',
+        weightUnit: Components\WeightUnitEnum::Lb,
+    ),
+    shippoApiVersion: '2018-02-08'
+
+);
+
+if ($response->userParcelTemplate !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `requestBody`                                        | *mixed*                                              | :heavy_check_mark:                                   | N/A                                                  |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                                                    | Type                                                                                                                                                                                         | Required                                                                                                                                                                                     | Description                                                                                                                                                                                  | Example                                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `userParcelTemplateCreateRequest`                                                                                                                                                            | [Components\UserParcelTemplateWithCarrierTemplateCreateRequest\|Components\UserParcelTemplateWithoutCarrierTemplateCreateRequest](../../Models/Components/UserParcelTemplateCreateRequest.md) | :heavy_check_mark:                                                                                                                                                                           | N/A                                                                                                                                                                                          |                                                                                                                                                                                              |
+| `shippoApiVersion`                                                                                                                                                                           | *?string*                                                                                                                                                                                    | :heavy_minus_sign:                                                                                                                                                                           | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide.                           | 2018-02-08                                                                                                                                                                                   |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateUserParcelTemplateResponse](../../Models/Operations/CreateUserParcelTemplateResponse.md)**
+**[?Components\UserParcelTemplate](../../Models/Components/UserParcelTemplate.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## delete
 
@@ -131,48 +86,44 @@ Deletes a user parcel template using an object ID.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->build();
 
-try {
-    
 
-    $response = $sdk->userParcelTemplates->delete('<value>', '2018-02-08');
 
-    if ($response->statusCode === 200) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->userParcelTemplates->delete(
+    userParcelTemplateObjectId: '<id>',
+    shippoApiVersion: '2018-02-08'
+
+);
+
+if ($response->statusCode === 200) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `userParcelTemplateObjectId`                         | *string*                                             | :heavy_check_mark:                                   | Object ID of the user parcel template                |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `userParcelTemplateObjectId`                                                                                                                                       | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the user parcel template                                                                                                                              |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
+### Errors
 
-### Response
-
-**[?\Shippo\API\Models\Operations\DeleteUserParcelTemplateResponse](../../Models/Operations/DeleteUserParcelTemplateResponse.md)**
-
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## get
 
@@ -182,48 +133,95 @@ template, identified by the object ID.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->build();
 
-try {
-    
 
-    $response = $sdk->userParcelTemplates->get('<value>', '2018-02-08');
 
-    if ($response->userParcelTemplate !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->userParcelTemplates->get(
+    userParcelTemplateObjectId: '<id>',
+    shippoApiVersion: '2018-02-08'
+
+);
+
+if ($response->userParcelTemplate !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `userParcelTemplateObjectId`                         | *string*                                             | :heavy_check_mark:                                   | Object ID of the user parcel template                |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `userParcelTemplateObjectId`                                                                                                                                       | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the user parcel template                                                                                                                              |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetUserParcelTemplateResponse](../../Models/Operations/GetUserParcelTemplateResponse.md)**
+**[?Components\UserParcelTemplate](../../Models/Components/UserParcelTemplate.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
+
+## list
+
+Returns a list all of all user parcel template objects.
+
+### Example Usage
+
+```php
+declare(strict_types=1);
+
+require 'vendor/autoload.php';
+
+use Shippo\API;
+
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->setShippoApiVersion('2018-02-08')
+    ->build();
+
+
+
+$response = $sdk->userParcelTemplates->list(
+    shippoApiVersion: '2018-02-08'
+);
+
+if ($response->userParcelTemplateList !== null) {
+    // handle response
+}
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
+
+### Response
+
+**[?Components\UserParcelTemplateList](../../Models/Components/UserParcelTemplateList.md)**
+
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## update
 
@@ -232,53 +230,56 @@ Updates an existing user parcel template.
 ### Example Usage
 
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->build();
 
-try {
-        $userParcelTemplateUpdateRequest = new Components\UserParcelTemplateUpdateRequest();
-    $userParcelTemplateUpdateRequest->distanceUnit = Components\DistanceUnitEnum::In;
-    $userParcelTemplateUpdateRequest->height = '6';
-    $userParcelTemplateUpdateRequest->length = '10';
-    $userParcelTemplateUpdateRequest->name = 'My Custom Template';
-    $userParcelTemplateUpdateRequest->weight = '12';
-    $userParcelTemplateUpdateRequest->weightUnit = Components\WeightUnitEnum::Lb;
-    $userParcelTemplateUpdateRequest->width = '8';
+$userParcelTemplateUpdateRequest = new Components\UserParcelTemplateUpdateRequest(
+    distanceUnit: Components\DistanceUnitEnum::In,
+    height: '6',
+    length: '10',
+    name: 'My Custom Template',
+    width: '8',
+    weight: '12',
+    weightUnit: Components\WeightUnitEnum::Lb,
+);
 
-    $response = $sdk->userParcelTemplates->update('<value>', '2018-02-08', $userParcelTemplateUpdateRequest);
+$response = $sdk->userParcelTemplates->update(
+    userParcelTemplateObjectId: '<id>',
+    shippoApiVersion: '2018-02-08',
+    userParcelTemplateUpdateRequest: $userParcelTemplateUpdateRequest
 
-    if ($response->userParcelTemplate !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->userParcelTemplate !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                                   | Type                                                                                                                        | Required                                                                                                                    | Description                                                                                                                 | Example                                                                                                                     |
-| --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `userParcelTemplateObjectId`                                                                                                | *string*                                                                                                                    | :heavy_check_mark:                                                                                                          | Object ID of the user parcel template                                                                                       |                                                                                                                             |
-| `shippoApiVersion`                                                                                                          | *string*                                                                                                                    | :heavy_minus_sign:                                                                                                          | String used to pick a non-default API version to use                                                                        | 2018-02-08                                                                                                                  |
-| `userParcelTemplateUpdateRequest`                                                                                           | [\Shippo\API\Models\Components\UserParcelTemplateUpdateRequest](../../Models/Components/UserParcelTemplateUpdateRequest.md) | :heavy_minus_sign:                                                                                                          | N/A                                                                                                                         |                                                                                                                             |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `userParcelTemplateObjectId`                                                                                                                                       | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the user parcel template                                                                                                                              |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
+| `userParcelTemplateUpdateRequest`                                                                                                                                  | [?Components\UserParcelTemplateUpdateRequest](../../Models/Components/UserParcelTemplateUpdateRequest.md)                                                          | :heavy_minus_sign:                                                                                                                                                 | N/A                                                                                                                                                                |                                                                                                                                                                    |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\UpdateUserParcelTemplateResponse](../../Models/Operations/UpdateUserParcelTemplateResponse.md)**
+**[?Components\UserParcelTemplate](../../Models/Components/UserParcelTemplate.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
