@@ -1,0 +1,12 @@
+# DutiesPayor
+
+Specifies who will pay the duties for the shipment. Only accepted for FedEx shipments.
+
+
+## Fields
+
+| Field                                                                                         | Type                                                                                          | Required                                                                                      | Description                                                                                   | Example                                                                                       |
+| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `account`                                                                                     | *?string*                                                                                     | :heavy_minus_sign:                                                                            | Account number to be billed for duties.                                                       | 2323434543                                                                                    |
+| `type`                                                                                        | [?Components\CustomsDeclarationType](../../Models/Components/CustomsDeclarationType.md)       | :heavy_minus_sign:                                                                            | Party to be billed for duties.                                                                | THIRD_PARTY                                                                                   |
+| `address`                                                                                     | [?Components\CustomsDeclarationAddress](../../Models/Components/CustomsDeclarationAddress.md) | :heavy_minus_sign:                                                                            | N/A                                                                                           |                                                                                               |
