@@ -7,8 +7,10 @@ generation:
   useClassNamesForArrayFields: true
   fixes:
     nameResolutionDec2023: true
+    nameResolutionFeb2025: false
     parameterOrderingFeb2024: true
     requestResponseComponentNamesFeb2024: true
+    securityFeb2025: false
   auth:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: false
@@ -20,6 +22,11 @@ info:
   description: Packagist library which integrates with Shippo Multi Carrier Shipping API. This library provides access to Shippo (goshippo.com) API capabilities. Including label generation, rating, tracking and more.
 php:
   version: 3.0.0-alpha
+  additionalDependencies:
+    autoload: {}
+    autoload-dev: {}
+    require: {}
+    require-dev: {}
   author: Shippo
   clientServerStatusCodesAsErrors: true
   defaultErrorName: SDKError
@@ -39,6 +46,7 @@ php:
     svcName: openapi
   license: MIT License
   maxMethodParams: 3
+  methodArguments: infer-optional-args
   namespace: Shippo\API
   outputModelSuffix: output
   packageName: shippo/shippo-php
