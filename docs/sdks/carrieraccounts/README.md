@@ -1,5 +1,5 @@
 # CarrierAccounts
-
+(*carrierAccounts*)
 
 ## Overview
 
@@ -27,53 +27,48 @@ By default, if the query parameter is omitted, the `service_levels` property wil
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="ListCarrierAccounts" method="get" path="/carrier_accounts" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Operations;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-        $request = new Operations\ListCarrierAccountsRequest();
-    $request->serviceLevels = false;
-    $request->carrier = Components\CarriersEnum::Posti;
-    $request->accountId = '<value>';
-    $request->page = 99895;
-    $request->results = 547272;;
+$request = new Operations\ListCarrierAccountsRequest();
 
-    $response = $sdk->carrierAccounts->list($request);
+$response = $sdk->carrierAccounts->list(
+    request: $request
+);
 
-    if ($response->carrierAccountPaginatedList !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->carrierAccountPaginatedList !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                         | Type                                                                                                              | Required                                                                                                          | Description                                                                                                       |
-| ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `$request`                                                                                                        | [\Shippo\API\Models\Operations\ListCarrierAccountsRequest](../../Models/Operations/ListCarrierAccountsRequest.md) | :heavy_check_mark:                                                                                                | The request object to use for the request.                                                                        |
-
+| Parameter                                                                                      | Type                                                                                           | Required                                                                                       | Description                                                                                    |
+| ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `$request`                                                                                     | [Operations\ListCarrierAccountsRequest](../../Models/Operations/ListCarrierAccountsRequest.md) | :heavy_check_mark:                                                                             | The request object to use for the request.                                                     |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\ListCarrierAccountsResponse](../../Models/Operations/ListCarrierAccountsResponse.md)**
+**[?Components\CarrierAccountPaginatedList](../../Models/Components/CarrierAccountPaginatedList.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## create
 
@@ -81,55 +76,64 @@ Creates a new carrier account or connects an existing carrier account to the Shi
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="CreateCarrierAccount" method="post" path="/carrier_accounts" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-        $connectExistingOwnAccountRequest = new Components\ConnectExistingOwnAccountRequest();
-    $connectExistingOwnAccountRequest->accountId = '321123';
-    $connectExistingOwnAccountRequest->active = false;
-    $connectExistingOwnAccountRequest->carrier = 'fedex';
-    $connectExistingOwnAccountRequest->metadata = 'FEDEX Account';
-    $connectExistingOwnAccountRequest->parameters = '<value>';
-    $connectExistingOwnAccountRequest->test = false;
+$connectExistingOwnAccountRequest = new Components\ConnectExistingOwnAccountRequest(
+    accountId: '321123',
+    carrier: 'fedex',
+    metadata: 'FEDEX Account',
+    parameters: [
+        'first_name' => 'Abdullah',
+        'last_name' => 'Ward',
+        'phone_number' => '915-577-4415 x207',
+        'from_address_st' => '<value>',
+        'from_address_city' => '<value>',
+        'from_address_state' => '<value>',
+        'from_address_zip' => '<value>',
+        'from_address_country_iso2' => '<value>',
+    ],
+    test: false,
+);
 
-    $response = $sdk->carrierAccounts->create($connectExistingOwnAccountRequest, '2018-02-08');
+$response = $sdk->carrierAccounts->create(
+    connectExistingOwnAccountRequest: $connectExistingOwnAccountRequest
+);
 
-    if ($response->carrierAccount !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->carrierAccount !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                                     | Type                                                                                                                          | Required                                                                                                                      | Description                                                                                                                   | Example                                                                                                                       |
-| ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `connectExistingOwnAccountRequest`                                                                                            | [\Shippo\API\Models\Components\ConnectExistingOwnAccountRequest](../../Models/Components/ConnectExistingOwnAccountRequest.md) | :heavy_check_mark:                                                                                                            | Examples.                                                                                                                     |                                                                                                                               |
-| `shippoApiVersion`                                                                                                            | *string*                                                                                                                      | :heavy_minus_sign:                                                                                                            | String used to pick a non-default API version to use                                                                          | 2018-02-08                                                                                                                    |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `connectExistingOwnAccountRequest`                                                                                                                                 | [Components\ConnectExistingOwnAccountRequest](../../Models/Components/ConnectExistingOwnAccountRequest.md)                                                         | :heavy_check_mark:                                                                                                                                                 | Examples.                                                                                                                                                          |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateCarrierAccountResponse](../../Models/Operations/CreateCarrierAccountResponse.md)**
+**[?Components\CarrierAccount](../../Models/Components/CarrierAccount.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## get
 
@@ -137,49 +141,48 @@ Returns an existing carrier account using an object ID.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="GetCarrierAccount" method="get" path="/carrier_accounts/{CarrierAccountId}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->carrierAccounts->get('<value>', '2018-02-08');
 
-    if ($response->carrierAccount !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->carrierAccounts->get(
+    carrierAccountId: '<id>'
+);
+
+if ($response->carrierAccount !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `carrierAccountId`                                   | *string*                                             | :heavy_check_mark:                                   | Object ID of the carrier account                     |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `carrierAccountId`                                                                                                                                                 | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the carrier account                                                                                                                                   |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetCarrierAccountResponse](../../Models/Operations/GetCarrierAccountResponse.md)**
+**[?Components\CarrierAccount](../../Models/Components/CarrierAccount.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## update
 
@@ -187,54 +190,65 @@ Updates an existing carrier account object. The account_id and carrier can't be 
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="UpdateCarrierAccount" method="put" path="/carrier_accounts/{CarrierAccountId}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-        $carrierAccountBase = new Components\CarrierAccountBase();
-    $carrierAccountBase->accountId = '****';
-    $carrierAccountBase->active = false;
-    $carrierAccountBase->carrier = 'usps';
-    $carrierAccountBase->parameters = '<value>';
+$carrierAccountBase = new Components\CarrierAccountBase(
+    accountId: '****',
+    carrier: 'usps',
+    parameters: [
+        'first_name' => 'Eldora',
+        'last_name' => 'Weber',
+        'phone_number' => '1-505-428-6798',
+        'from_address_st' => '<value>',
+        'from_address_city' => '<value>',
+        'from_address_state' => '<value>',
+        'from_address_zip' => '<value>',
+        'from_address_country_iso2' => '<value>',
+    ],
+);
 
-    $response = $sdk->carrierAccounts->update('<value>', '2018-02-08', $carrierAccountBase);
+$response = $sdk->carrierAccounts->update(
+    carrierAccountId: '<id>',
+    carrierAccountBase: $carrierAccountBase
 
-    if ($response->carrierAccount !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->carrierAccount !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                         | Type                                                                                              | Required                                                                                          | Description                                                                                       | Example                                                                                           |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `carrierAccountId`                                                                                | *string*                                                                                          | :heavy_check_mark:                                                                                | Object ID of the carrier account                                                                  |                                                                                                   |
-| `shippoApiVersion`                                                                                | *string*                                                                                          | :heavy_minus_sign:                                                                                | String used to pick a non-default API version to use                                              | 2018-02-08                                                                                        |
-| `carrierAccountBase`                                                                              | [\Shippo\API\Models\Components\CarrierAccountBase](../../Models/Components/CarrierAccountBase.md) | :heavy_minus_sign:                                                                                | Examples.                                                                                         |                                                                                                   |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `carrierAccountId`                                                                                                                                                 | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the carrier account                                                                                                                                   |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
+| `carrierAccountBase`                                                                                                                                               | [?Components\CarrierAccountBase](../../Models/Components/CarrierAccountBase.md)                                                                                    | :heavy_minus_sign:                                                                                                                                                 | Examples.                                                                                                                                                          |                                                                                                                                                                    |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\UpdateCarrierAccountResponse](../../Models/Operations/UpdateCarrierAccountResponse.md)**
+**[?Components\CarrierAccount](../../Models/Components/CarrierAccount.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## initiateOauth2Signin
 
@@ -242,51 +256,54 @@ Used by client applications to setup or reconnect an existing carrier account wi
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="InitiateOauth2Signin" method="get" path="/carrier_accounts/{CarrierAccountObjectId}/signin/initiate" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Operations;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
+$request = new Operations\InitiateOauth2SigninRequest(
+    carrierAccountObjectId: '<id>',
+    redirectUri: 'https://ashamed-reporter.biz',
+);
 
-    $response = $sdk->carrierAccounts->initiateOauth2Signin('<value>', 'http://fine-cummerbund.biz', '<value>', '2018-02-08');
+$response = $sdk->carrierAccounts->initiateOauth2Signin(
+    request: $request
+);
 
-    if ($response->statusCode === 200) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->statusCode === 200) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                                                                                                                      | Type                                                                                                                                                                                                           | Required                                                                                                                                                                                                       | Description                                                                                                                                                                                                    | Example                                                                                                                                                                                                        |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `carrierAccountObjectId`                                                                                                                                                                                       | *string*                                                                                                                                                                                                       | :heavy_check_mark:                                                                                                                                                                                             | The carrier account ID (UUID) to start a signin process.                                                                                                                                                       |                                                                                                                                                                                                                |
-| `redirectUri`                                                                                                                                                                                                  | *string*                                                                                                                                                                                                       | :heavy_check_mark:                                                                                                                                                                                             | Callback URL. The URL that tells the authorization server where to send the user back to after they approve the request.                                                                                       |                                                                                                                                                                                                                |
-| `state`                                                                                                                                                                                                        | *string*                                                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                                                             | A random string generated by the consuming application and included in the request to prevent CSRF attacks. The consuming application checks that the same value is returned after the user authorizes Shippo. |                                                                                                                                                                                                                |
-| `shippoApiVersion`                                                                                                                                                                                             | *string*                                                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                                                             | String used to pick a non-default API version to use                                                                                                                                                           | 2018-02-08                                                                                                                                                                                                     |
-
+| Parameter                                                                                        | Type                                                                                             | Required                                                                                         | Description                                                                                      |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `$request`                                                                                       | [Operations\InitiateOauth2SigninRequest](../../Models/Operations/InitiateOauth2SigninRequest.md) | :heavy_check_mark:                                                                               | The request object to use for the request.                                                       |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\InitiateOauth2SigninResponse](../../Models/Operations/InitiateOauth2SigninResponse.md)**
+**[?Operations\InitiateOauth2SigninResponse](../../Models/Operations/InitiateOauth2SigninResponse.md)**
 
+### Errors
+
+| Error Type                                                     | Status Code                                                    | Content Type                                                   |
+| -------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- |
+| Errors\InitiateOauth2SigninResponseBody                        | 400                                                            | application/json                                               |
+| Errors\InitiateOauth2SigninCarrierAccountsResponseBody         | 401                                                            | application/json                                               |
+| Errors\InitiateOauth2SigninCarrierAccountsResponseResponseBody | 404                                                            | application/json                                               |
+| Errors\SDKError                                                | 4XX, 5XX                                                       | \*/\*                                                          |
 
 ## register
 
@@ -294,49 +311,51 @@ Adds a Shippo carrier account
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="RegisterCarrierAccount" method="post" path="/carrier_accounts/register/new" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->carrierAccounts->register('<value>', '2018-02-08');
 
-    if ($response->carrierAccount !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->carrierAccounts->register(
+    requestBody: new Components\CarrierAccountDeutschePostCreateRequest(
+        parameters: new Components\CarrierAccountDeutschePostCreateRequestParameters(),
+    )
+);
+
+if ($response->carrierAccount !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `requestBody`                                        | *mixed*                                              | :heavy_check_mark:                                   | Examples.                                            |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | Required                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Example                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `requestBody`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | [Components\CarrierAccountCanadaPostCreateRequest\|Components\CarrierAccountChronopostCreateRequest\|Components\CarrierAccountColissimoCreateRequest\|Components\CarrierAccountCorreosCreateRequest\|Components\CarrierAccountDeutschePostCreateRequest\|Components\CarrierAccountDHLExpressCreateRequest\|Components\CarrierAccountDpdDeCreateRequest\|Components\CarrierAccountDPDUKCreateRequest\|Components\CarrierAccountFedExCreateRequest\|Components\CarrierAccountHermesUKCreateRequest\|Components\CarrierAccountMondialRelayCreateRequest\|Components\CarrierAccountPosteItalianeCreateRequest\|Components\CarrierAccountUPSCreateRequest\|Components\CarrierAccountUSPSCreateRequest\|Components\CarrierAccountSendleCreateRequest](../../Models/Operations/RegisterCarrierAccountRequestBody.md) | :heavy_check_mark:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | The body of the request.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `shippoApiVersion`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | *?string*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | :heavy_minus_sign:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | 2018-02-08                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\RegisterCarrierAccountResponse](../../Models/Operations/RegisterCarrierAccountResponse.md)**
+**[?Components\CarrierAccount](../../Models/Components/CarrierAccount.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## getRegistrationStatus
 
@@ -344,46 +363,46 @@ Returns the registration status for the given account for the given carrier
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="GetCarrierRegistrationStatus" method="get" path="/carrier_accounts/reg-status" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Operations;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->carrierAccounts->getRegistrationStatus(Operations\Carrier::Usps, '2018-02-08');
 
-    if ($response->carrierAccountRegistrationStatus !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->carrierAccounts->getRegistrationStatus(
+    carrier: Operations\Carrier::Ups
+);
+
+if ($response->carrierAccountRegistrationStatus !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                   | Type                                                                        | Required                                                                    | Description                                                                 | Example                                                                     |
-| --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| `carrier`                                                                   | [\Shippo\API\Models\Operations\Carrier](../../Models/Operations/Carrier.md) | :heavy_check_mark:                                                          | filter by specific carrier                                                  |                                                                             |
-| `shippoApiVersion`                                                          | *string*                                                                    | :heavy_minus_sign:                                                          | String used to pick a non-default API version to use                        | 2018-02-08                                                                  |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `carrier`                                                                                                                                                          | [Operations\Carrier](../../Models/Operations/Carrier.md)                                                                                                           | :heavy_check_mark:                                                                                                                                                 | filter by specific carrier                                                                                                                                         |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetCarrierRegistrationStatusResponse](../../Models/Operations/GetCarrierRegistrationStatusResponse.md)**
+**[?Components\CarrierAccountRegistrationStatus](../../Models/Components/CarrierAccountRegistrationStatus.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |

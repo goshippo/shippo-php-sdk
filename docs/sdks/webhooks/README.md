@@ -1,10 +1,14 @@
 # Webhooks
-
+(*webhooks*)
 
 ## Overview
 
 Webhooks are a way for Shippo to notify your application when a specific event occurs. For example, when a label is purchased or when a shipment tracking status has changed. You can use webhooks to trigger actions in your application, such as sending an email or updating a database.
 <SchemaDefinition schemaRef="#/components/schemas/Webhook"/>
+
+# Webhook Payload
+The payload is the body of the POST request Shippo sends to the URL specified at the time of webhook registration.
+<SchemaDefinition schemaRef="#/components/schemas/WebhookPayload"/>
 
 ### Available Operations
 
@@ -20,51 +24,52 @@ Creates a new webhook to send notifications to a URL when a specific event occur
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="createWebhook" method="post" path="/webhooks" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-$sdk = API\ShippoSDK::builder()
-    ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+$request = new Components\WebhookUpdateRequest(
+    event: Components\WebhookEventTypeEnum::TransactionUpdated,
+    url: 'https://example.com/shippo-webhook',
+    active: true,
+    isTest: false,
+);
 
-try {
-        $request = new Components\WebhookUpdateRequest();
-    $request->event = Components\WebhookEventTypeEnum::TrackUpdated;
-    $request->url = 'https://wobbly-marmalade.org';
-    $request->active = false;
-    $request->isTest = false;;
+$response = $sdk->webhooks->createWebhook(
+    request: $request
+);
 
-    $response = $sdk->webhooks->createWebhook($request);
-
-    if ($response->webhook !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->webhook !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                             | Type                                                                                                  | Required                                                                                              | Description                                                                                           |
-| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `$request`                                                                                            | [\Shippo\API\Models\Components\WebhookUpdateRequest](../../Models/Components/WebhookUpdateRequest.md) | :heavy_check_mark:                                                                                    | The request object to use for the request.                                                            |
-
+| Parameter                                                                          | Type                                                                               | Required                                                                           | Description                                                                        |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `$request`                                                                         | [Components\WebhookUpdateRequest](../../Models/Components/WebhookUpdateRequest.md) | :heavy_check_mark:                                                                 | The request object to use for the request.                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateWebhookResponse](../../Models/Operations/CreateWebhookResponse.md)**
+**[?Components\Webhook](../../Models/Components/Webhook.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## listWebhooks
 
@@ -72,39 +77,40 @@ Returns a list of all webhooks you have created.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="listWebhooks" method="get" path="/webhooks" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-$sdk = API\ShippoSDK::builder()
-    ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
 
-try {
-    $response = $sdk->webhooks->listWebhooks();
 
-    if ($response->webhookPaginatedList !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->webhooks->listWebhooks(
+
+);
+
+if ($response->webhookPaginatedList !== null) {
+    // handle response
 }
 ```
 
-
 ### Response
 
-**[?\Shippo\API\Models\Operations\ListWebhooksResponse](../../Models/Operations/ListWebhooksResponse.md)**
+**[?Components\WebhookPaginatedList](../../Models/Components/WebhookPaginatedList.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## getWebhook
 
@@ -112,34 +118,28 @@ Returns the details of a specific webhook using the webhook object ID.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="getWebhook" method="get" path="/webhooks/{webhookId}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-$sdk = API\ShippoSDK::builder()
-    ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->webhooks->getWebhook('<value>');
+$response = $sdk->webhooks->getWebhook(
+    webhookId: '<id>'
+);
 
-    if ($response->webhook !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->webhook !== null) {
+    // handle response
 }
 ```
 
@@ -149,11 +149,15 @@ try {
 | ------------------------------------ | ------------------------------------ | ------------------------------------ | ------------------------------------ |
 | `webhookId`                          | *string*                             | :heavy_check_mark:                   | Object ID of the webhook to retrieve |
 
-
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetWebhookResponse](../../Models/Operations/GetWebhookResponse.md)**
+**[?Components\Webhook](../../Models/Components/Webhook.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## updateWebhook
 
@@ -161,53 +165,55 @@ Updates an existing webhook using the webhook object ID.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="updateWebhook" method="put" path="/webhooks/{webhookId}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-$sdk = API\ShippoSDK::builder()
-    ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+$webhookUpdateRequest = new Components\WebhookUpdateRequest(
+    event: Components\WebhookEventTypeEnum::All,
+    url: 'https://example.com/shippo-webhook',
+    active: true,
+    isTest: false,
+);
 
-try {
-        $webhookUpdateRequest = new Components\WebhookUpdateRequest();
-    $webhookUpdateRequest->event = Components\WebhookEventTypeEnum::TrackUpdated;
-    $webhookUpdateRequest->url = 'https://small-cock.info';
-    $webhookUpdateRequest->active = false;
-    $webhookUpdateRequest->isTest = false;
+$response = $sdk->webhooks->updateWebhook(
+    webhookId: '<id>',
+    webhookUpdateRequest: $webhookUpdateRequest
 
-    $response = $sdk->webhooks->updateWebhook('<value>', $webhookUpdateRequest);
+);
 
-    if ($response->webhook !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->webhook !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                             | Type                                                                                                  | Required                                                                                              | Description                                                                                           |
-| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `webhookId`                                                                                           | *string*                                                                                              | :heavy_check_mark:                                                                                    | Object ID of the webhook to retrieve                                                                  |
-| `webhookUpdateRequest`                                                                                | [\Shippo\API\Models\Components\WebhookUpdateRequest](../../Models/Components/WebhookUpdateRequest.md) | :heavy_check_mark:                                                                                    | N/A                                                                                                   |
-
+| Parameter                                                                          | Type                                                                               | Required                                                                           | Description                                                                        |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `webhookId`                                                                        | *string*                                                                           | :heavy_check_mark:                                                                 | Object ID of the webhook to retrieve                                               |
+| `webhookUpdateRequest`                                                             | [Components\WebhookUpdateRequest](../../Models/Components/WebhookUpdateRequest.md) | :heavy_check_mark:                                                                 | N/A                                                                                |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\UpdateWebhookResponse](../../Models/Operations/UpdateWebhookResponse.md)**
+**[?Components\Webhook](../../Models/Components/Webhook.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## deleteWebhook
 
@@ -215,34 +221,28 @@ Deletes a specific webhook using the webhook object ID.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="deleteWebhook" method="delete" path="/webhooks/{webhookId}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-$sdk = API\ShippoSDK::builder()
-    ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
 
-try {
-    
 
-    $response = $sdk->webhooks->deleteWebhook('<value>');
+$response = $sdk->webhooks->deleteWebhook(
+    webhookId: '<id>'
+);
 
-    if ($response->statusCode === 200) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->statusCode === 200) {
+    // handle response
 }
 ```
 
@@ -252,8 +252,8 @@ try {
 | ---------------------------------- | ---------------------------------- | ---------------------------------- | ---------------------------------- |
 | `webhookId`                        | *string*                           | :heavy_check_mark:                 | Object ID of the webhook to delete |
 
+### Errors
 
-### Response
-
-**[?\Shippo\API\Models\Operations\DeleteWebhookResponse](../../Models/Operations/DeleteWebhookResponse.md)**
-
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |

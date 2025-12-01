@@ -21,12 +21,19 @@ Shippo external API.: Use this API to integrate with the Shippo service
 
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
+<!-- $toc-max-depth=2 -->
+* [<img src="https://docs.goshippo.com/images/Logo.png" width="30" alt="Shippo logo"> Shippo PHP SDK](#img-srchttpsdocsgoshippocomimageslogopng-width30-altshippo-logo-shippo-php-sdk)
+  * [SDK Installation](#sdk-installation)
+  * [SDK Example Usage](#sdk-example-usage)
+  * [Authentication](#authentication)
+  * [Available Resources and Operations](#available-resources-and-operations)
+  * [Error Handling](#error-handling)
+  * [Server Selection](#server-selection)
+* [Development](#development)
+  * [Maturity](#maturity)
+  * [Contributions](#contributions)
+  * [About Shippo](#about-shippo)
 
-* [SDK Installation](#sdk-installation)
-* [SDK Example Usage](#sdk-example-usage)
-* [Available Resources and Operations](#available-resources-and-operations)
-* [Error Handling](#error-handling)
-* [Server Selection](#server-selection)
 <!-- End Table of Contents [toc] -->
 
 <!-- Start SDK Installation [installation] -->
@@ -34,26 +41,9 @@ Shippo external API.: Use this API to integrate with the Shippo service
 
 The SDK relies on [Composer](https://getcomposer.org/) to manage its dependencies.
 
-To install the SDK first add the below to your `composer.json` file:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "github",
-            "url": "<UNSET>.git"
-        }
-    ],
-    "require": {
-        "Shippo": "*"
-    }
-}
-```
-
-Then run the following command:
-
+To install the SDK and add it as a dependency to an existing `composer.json` file:
 ```bash
-composer update
+composer require "shippo/shippo-php"
 ```
 <!-- End SDK Installation [installation] -->
 
@@ -69,18 +59,18 @@ require 'vendor/autoload.php';
 
 use Shippo\API;
 
-$security = '<YOUR_API_KEY_HERE>';
-
 $sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
 
 
 $response = $sdk->addresses->list(
     page: 1,
-    results: 5,
-    shippoApiVersion: '2018-02-08'
+    results: 5
 
 );
 
@@ -89,6 +79,46 @@ if ($response->addressPaginatedList !== null) {
 }
 ```
 <!-- End SDK Example Usage [usage] -->
+
+<!-- Start Authentication [security] -->
+## Authentication
+
+### Per-Client Security Schemes
+
+This SDK supports the following security scheme globally:
+
+| Name           | Type   | Scheme  |
+| -------------- | ------ | ------- |
+| `apiKeyHeader` | apiKey | API key |
+
+To authenticate with the API the `apiKeyHeader` parameter must be set when initializing the SDK. For example:
+```php
+declare(strict_types=1);
+
+require 'vendor/autoload.php';
+
+use Shippo\API;
+
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->setShippoApiVersion('2018-02-08')
+    ->build();
+
+
+
+$response = $sdk->addresses->list(
+    page: 1,
+    results: 5
+
+);
+
+if ($response->addressPaginatedList !== null) {
+    // handle response
+}
+```
+<!-- End Authentication [security] -->
 
 <!-- Start Available Resources and Operations [operations] -->
 ## Available Resources and Operations
@@ -192,7 +222,6 @@ if ($response->addressPaginatedList !== null) {
 * [create](docs/sdks/shipments/README.md#create) - Create a new shipment
 * [get](docs/sdks/shipments/README.md#get) - Retrieve a shipment
 
-
 ### [shippoAccounts](docs/sdks/shippoaccounts/README.md)
 
 * [list](docs/sdks/shippoaccounts/README.md#list) - List all Shippo Accounts
@@ -261,18 +290,20 @@ declare(strict_types=1);
 require 'vendor/autoload.php';
 
 use Shippo\API;
+use Shippo\API\Models\Errors;
 use Shippo\API\Models\Operations;
-
-$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
 try {
     $request = new Operations\InitiateOauth2SigninRequest(
         carrierAccountObjectId: '<id>',
-        redirectUri: 'https://enlightened-mortise.com/',
+        redirectUri: 'https://ashamed-reporter.biz',
     );
 
     $response = $sdk->carrierAccounts->initiateOauth2Signin(
@@ -303,7 +334,7 @@ try {
 
 ### Override Server URL Per-Client
 
-The default server can also be overridden globally using the `setServerUrl(string $serverUrl)` builder method when initializing the SDK client instance. For example:
+The default server can be overridden globally using the `setServerUrl(string $serverUrl)` builder method when initializing the SDK client instance. For example:
 ```php
 declare(strict_types=1);
 
@@ -311,19 +342,19 @@ require 'vendor/autoload.php';
 
 use Shippo\API;
 
-$security = '<YOUR_API_KEY_HERE>';
-
 $sdk = API\Shippo::builder()
-    ->setServerURL("https://api.goshippo.com")
+    ->setServerURL('https://api.goshippo.com')
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
 
 
 $response = $sdk->addresses->list(
     page: 1,
-    results: 5,
-    shippoApiVersion: '2018-02-08'
+    results: 5
 
 );
 
