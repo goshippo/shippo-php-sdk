@@ -1,0 +1,11 @@
+
+
+## 2026-02-16 00:45:32
+### Changes
+Based on:
+- OpenAPI Doc  
+- Speakeasy CLI 1.718.0 (2.824.1) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [php v3.0.0-alpha] .
+### Releases
+- [Composer v3.0.0-alpha] https://packagist.org/packages/shippo/shippo-php#v3.0.0-alpha - .

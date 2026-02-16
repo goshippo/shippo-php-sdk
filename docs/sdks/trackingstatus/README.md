@@ -1,6 +1,5 @@
 # TrackingStatus
 
-
 ## Overview
 
 <p style="text-align: center; background-color: #F2F3F4;"></br>
@@ -26,52 +25,53 @@ Registers a webhook that will send HTTP notifications to you when the status of 
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="CreateTrack" method="post" path="/tracks" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-        $tracksRequest = new Components\TracksRequest();
-    $tracksRequest->carrier = 'usps';
-    $tracksRequest->metadata = 'Order 000123';
-    $tracksRequest->trackingNumber = '9205590164917312751089';
+$tracksRequest = new Components\TracksRequest(
+    carrier: 'usps',
+    metadata: 'Order 000123',
+    trackingNumber: '9205590164917312751089',
+);
 
-    $response = $sdk->trackingStatus->create($tracksRequest, '2018-02-08');
+$response = $sdk->trackingStatus->create(
+    tracksRequest: $tracksRequest
+);
 
-    if ($response->track !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->track !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                               | Type                                                                                    | Required                                                                                | Description                                                                             | Example                                                                                 |
-| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `tracksRequest`                                                                         | [\Shippo\API\Models\Components\TracksRequest](../../Models/Components/TracksRequest.md) | :heavy_check_mark:                                                                      | N/A                                                                                     |                                                                                         |
-| `shippoApiVersion`                                                                      | *string*                                                                                | :heavy_minus_sign:                                                                      | String used to pick a non-default API version to use                                    | 2018-02-08                                                                              |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `tracksRequest`                                                                                                                                                    | [Components\TracksRequest](../../Models/Components/TracksRequest.md)                                                                                               | :heavy_check_mark:                                                                                                                                                 | N/A                                                                                                                                                                |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateTrackResponse](../../Models/Operations/CreateTrackResponse.md)**
+**[?Components\Track](../../Models/Components/Track.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## get
 
@@ -79,47 +79,48 @@ Returns the tracking status of a shipment using a carrier name and a tracking nu
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="GetTrack" method="get" path="/tracks/{Carrier}/{TrackingNumber}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->trackingStatus->get('<value>', '<value>', '2018-02-08');
 
-    if ($response->track !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->trackingStatus->get(
+    trackingNumber: '<value>',
+    carrier: '<value>'
+
+);
+
+if ($response->track !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `trackingNumber`                                     | *string*                                             | :heavy_check_mark:                                   | Tracking number                                      |                                                      |
-| `carrier`                                            | *string*                                             | :heavy_check_mark:                                   | Name of the carrier                                  |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `trackingNumber`                                                                                                                                                   | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Tracking number                                                                                                                                                    |                                                                                                                                                                    |
+| `carrier`                                                                                                                                                          | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Name of the carrier                                                                                                                                                |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetTrackResponse](../../Models/Operations/GetTrackResponse.md)**
+**[?Components\Track](../../Models/Components/Track.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |

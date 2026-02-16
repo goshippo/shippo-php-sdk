@@ -1,6 +1,5 @@
 # Batches
 
-
 ## Overview
 
 A batch is a technique for creating multiple labels at once. Use the  batch object to create and purchase many shipments in two API calls. After creating the batch, retrieve the batch to verify that all shipments are valid. You can add and remove shipments after you have created the batch. When all shipments are valid you can purchase the batch and retrieve all the shipping labels.
@@ -28,56 +27,55 @@ Creates a new batch object for purchasing shipping labels for many shipments at 
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="CreateBatch" method="post" path="/batches" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-        $batchCreateRequest = new Components\BatchCreateRequest();
-    $batchCreateRequest->defaultCarrierAccount = '078870331023437cb917f5187429b093';
-    $batchCreateRequest->defaultServicelevelToken = 'usps_priority';
-    $batchCreateRequest->labelFiletype = Components\LabelFileTypeEnum::PDF4x6;
-    $batchCreateRequest->metadata = 'BATCH #1';
-    $batchCreateRequest->batchShipments = [
-        new Components\BatchShipmentCreateRequest(),
-    ];
+$batchCreateRequest = new Components\BatchCreateRequest(
+    defaultCarrierAccount: '078870331023437cb917f5187429b093',
+    defaultServicelevelToken: 'usps_priority',
+    labelFiletype: Components\LabelFileTypeEnum::PDF4x6,
+    metadata: 'BATCH #1',
+    batchShipments: [],
+);
 
-    $response = $sdk->batches->create($batchCreateRequest, '2018-02-08');
+$response = $sdk->batches->create(
+    batchCreateRequest: $batchCreateRequest
+);
 
-    if ($response->batch !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->batch !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                         | Type                                                                                              | Required                                                                                          | Description                                                                                       | Example                                                                                           |
-| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `batchCreateRequest`                                                                              | [\Shippo\API\Models\Components\BatchCreateRequest](../../Models/Components/BatchCreateRequest.md) | :heavy_check_mark:                                                                                | Batch details.                                                                                    |                                                                                                   |
-| `shippoApiVersion`                                                                                | *string*                                                                                          | :heavy_minus_sign:                                                                                | String used to pick a non-default API version to use                                              | 2018-02-08                                                                                        |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `batchCreateRequest`                                                                                                                                               | [Components\BatchCreateRequest](../../Models/Components/BatchCreateRequest.md)                                                                                     | :heavy_check_mark:                                                                                                                                                 | Batch details.                                                                                                                                                     |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateBatchResponse](../../Models/Operations/CreateBatchResponse.md)**
+**[?Components\Batch](../../Models/Components/Batch.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## get
 
@@ -88,49 +86,50 @@ For more details on filtering results, see our guide on <a href="https://docs.go
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="GetBatch" method="get" path="/batches/{BatchId}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Operations;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
+$request = new Operations\GetBatchRequest(
+    batchId: '<id>',
+);
 
-    $response = $sdk->batches->get('<value>', '2018-02-08');
+$response = $sdk->batches->get(
+    request: $request
+);
 
-    if ($response->batch !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->batch !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `batchId`                                            | *string*                                             | :heavy_check_mark:                                   | Object ID of the batch                               |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                | Type                                                                     | Required                                                                 | Description                                                              |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| `$request`                                                               | [Operations\GetBatchRequest](../../Models/Operations/GetBatchRequest.md) | :heavy_check_mark:                                                       | The request object to use for the request.                               |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetBatchResponse](../../Models/Operations/GetBatchResponse.md)**
+**[?Components\Batch](../../Models/Components/Batch.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## addShipments
 
@@ -138,52 +137,174 @@ Adds batch shipments to an existing batch.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="AddShipmentsToBatch" method="post" path="/batches/{BatchId}/add_shipments" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->batches->addShipments('<value>', [
-    new Components\BatchShipmentCreateRequest(),
-], '2018-02-08');
 
-    if ($response->batch !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->batches->addShipments(
+    batchId: '<id>',
+    requestBody: [
+        new Components\BatchShipmentCreateRequest(
+            carrierAccount: 'a4391cd4ab974f478f55dc08b5c8e3b3',
+            metadata: 'SHIPMENT #1',
+            servicelevelToken: 'fedex_ground',
+            shipment: new Components\ShipmentCreateRequest(
+                extra: new Components\ShipmentExtra(
+                    accountsReceivableCustomerAccount: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    appropriationNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    billOfLadingNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    cod: new Components\Cod(
+                        amount: '5.5',
+                        currency: 'USD',
+                        paymentMethod: Components\PaymentMethod::Cash,
+                    ),
+                    codNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    customerReference: new Components\CustomerReference(
+                        refSort: 1,
+                    ),
+                    dealerOrderNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    deptNumber: new Components\DepartmentNumber(
+                        refSort: 3,
+                    ),
+                    fdaProductCode: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    insurance: new Components\Insurance(
+                        amount: '5.5',
+                        currency: 'USD',
+                    ),
+                    invoiceNumber: new Components\InvoiceNumber(
+                        refSort: 2,
+                    ),
+                    manifestNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    modelNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    partNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    poNumber: new Components\PoNumber(
+                        refSort: 2,
+                    ),
+                    productionCode: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    purchaseRequestNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    rmaNumber: new Components\RmaNumber(
+                        refSort: 1,
+                    ),
+                    salespersonNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    serialNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    storeNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                    transactionReferenceNumber: new Components\UPSReferenceFields(
+                        prefix: 'ABC',
+                        value: 'value',
+                        refSort: 1,
+                    ),
+                ),
+                metadata: 'Customer ID 123456',
+                shipmentDate: '2021-03-22T12:00:00Z',
+                addressFrom: 'd799c2679e644279b59fe661ac8fa488',
+                addressReturn: 'd799c2679e644279b59fe661ac8fa488',
+                addressTo: 'd799c2679e644279b59fe661ac8fa489',
+                customsDeclaration: 'adcfdddf8ec64b84ad22772bce3ea37a',
+                carrierAccounts: [
+                    '065a4a8c10d24a34ab932163a1b87f52',
+                    '73f706f4bdb94b54a337563840ce52b0',
+                ],
+                parcels: [
+                    '<value>',
+                ],
+            ),
+        ),
+    ]
+
+);
+
+if ($response->batch !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                                | Type                                                                                                                     | Required                                                                                                                 | Description                                                                                                              | Example                                                                                                                  |
-| ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| `batchId`                                                                                                                | *string*                                                                                                                 | :heavy_check_mark:                                                                                                       | Object ID of the batch                                                                                                   |                                                                                                                          |
-| `requestBody`                                                                                                            | array<[\Shippo\API\Models\Components\BatchShipmentCreateRequest](../../Models/Components/BatchShipmentCreateRequest.md)> | :heavy_check_mark:                                                                                                       | Array of shipments to add to the batch                                                                                   |                                                                                                                          |
-| `shippoApiVersion`                                                                                                       | *string*                                                                                                                 | :heavy_minus_sign:                                                                                                       | String used to pick a non-default API version to use                                                                     | 2018-02-08                                                                                                               |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `batchId`                                                                                                                                                          | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the batch                                                                                                                                             |                                                                                                                                                                    |
+| `requestBody`                                                                                                                                                      | array<[Components\BatchShipmentCreateRequest](../../Models/Components/BatchShipmentCreateRequest.md)>                                                              | :heavy_check_mark:                                                                                                                                                 | Array of shipments to add to the batch                                                                                                                             |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\AddShipmentsToBatchResponse](../../Models/Operations/AddShipmentsToBatchResponse.md)**
+**[?Components\Batch](../../Models/Components/Batch.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## purchase
 
@@ -194,49 +315,48 @@ When all the shipments are purchased, the status will change to `PURCHASED` and 
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="PurchaseBatch" method="post" path="/batches/{BatchId}/purchase" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->batches->purchase('<value>', '2018-02-08');
 
-    if ($response->batch !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->batches->purchase(
+    batchId: '<id>'
+);
+
+if ($response->batch !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `batchId`                                            | *string*                                             | :heavy_check_mark:                                   | Object ID of the batch                               |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `batchId`                                                                                                                                                          | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the batch                                                                                                                                             |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\PurchaseBatchResponse](../../Models/Operations/PurchaseBatchResponse.md)**
+**[?Components\Batch](../../Models/Components/Batch.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## removeShipments
 
@@ -244,49 +364,50 @@ Removes shipments from an existing batch shipment.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="RemoveShipmentsFromBatch" method="post" path="/batches/{BatchId}/remove_shipments" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->batches->removeShipments('<value>', [
-    '<value>',
-], '2018-02-08');
 
-    if ($response->batch !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->batches->removeShipments(
+    batchId: '<id>',
+    requestBody: [
+        '<value 1>',
+    ]
+
+);
+
+if ($response->batch !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                              | Type                                                   | Required                                               | Description                                            | Example                                                |
-| ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------ |
-| `batchId`                                              | *string*                                               | :heavy_check_mark:                                     | Object ID of the batch                                 |                                                        |
-| `requestBody`                                          | array<*string*>                                        | :heavy_check_mark:                                     | Array of shipments object ids to remove from the batch |                                                        |
-| `shippoApiVersion`                                     | *string*                                               | :heavy_minus_sign:                                     | String used to pick a non-default API version to use   | 2018-02-08                                             |
-
+| Parameter                                                                                                                                                          | Type                                                                                                                                                               | Required                                                                                                                                                           | Description                                                                                                                                                        | Example                                                                                                                                                            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `batchId`                                                                                                                                                          | *string*                                                                                                                                                           | :heavy_check_mark:                                                                                                                                                 | Object ID of the batch                                                                                                                                             |                                                                                                                                                                    |
+| `requestBody`                                                                                                                                                      | array<*string*>                                                                                                                                                    | :heavy_check_mark:                                                                                                                                                 | Array of shipments object ids to remove from the batch                                                                                                             |                                                                                                                                                                    |
+| `shippoApiVersion`                                                                                                                                                 | *?string*                                                                                                                                                          | :heavy_minus_sign:                                                                                                                                                 | Optional string used to pick a non-default API version to use. See our <a href="https://docs.goshippo.com/docs/api_concepts/apiversioning/">API version</a> guide. | 2018-02-08                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\RemoveShipmentsFromBatchResponse](../../Models/Operations/RemoveShipmentsFromBatchResponse.md)**
+**[?Components\Batch](../../Models/Components/Batch.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |

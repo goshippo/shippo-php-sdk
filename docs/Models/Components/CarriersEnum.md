@@ -19,7 +19,6 @@
 | collect_plus | CollectPlus|
 | correios_br | CorreiosBR|
 | correos_espana | Correos España |
-| couriersplease | Couriers Please|
 | colissimo | Colissimo|
 | deutsche_post | Deutsche Post|
 | dhl_benelux | DHL Benelux|
@@ -45,18 +44,16 @@
 | new_zealand_post | New Zealand Post (also used for Pace and CourierPost)|
 | nippon_express | Nippon Express|
 | ontrac | OnTrac|
-| orangeds | OrangeDS|
 | parcelforce | Parcelforce|
-| parcel | Parcel|
 | passport | Passport|
 | pcf | PCF|
 | poste_italiane | Poste Italiane |
 | posti | Posti|
 | purolator | Purolator|
 | royal_mail | Royal Mail|
+| royal_mail_sf | Royal Mail Storefeeder|
 | rr_donnelley | ePost Global|
 | russian_post | Russian Post|
-| sendle | Sendle|
 | skypostal | SkyPostal|
 | stuart | Stuart|
 | swyft | Swyft|
@@ -64,8 +61,6 @@
 | ups | UPS|
 | usps | USPS|
 | veho | Veho |
-| x_delivery | X Delivery (now Maergo)|
-| yodel | Yodel|
 
 
 
@@ -90,7 +85,6 @@
 | `CollectPlus`      | collect_plus       |
 | `CorreiosBr`       | correios_br        |
 | `CorreosEspana`    | correos_espana     |
-| `Couriersplease`   | couriersplease     |
 | `Colissimo`        | colissimo          |
 | `DeutschePost`     | deutsche_post      |
 | `DhlBenelux`       | dhl_benelux        |
@@ -116,18 +110,16 @@
 | `NewZealandPost`   | new_zealand_post   |
 | `NipponExpress`    | nippon_express     |
 | `Ontrac`           | ontrac             |
-| `Orangeds`         | orangeds           |
 | `Parcelforce`      | parcelforce        |
-| `Parcel`           | parcel             |
 | `Passport`         | passport           |
 | `Pcf`              | pcf                |
 | `PosteItaliane`    | poste_italiane     |
 | `Posti`            | posti              |
 | `Purolator`        | purolator          |
 | `RoyalMail`        | royal_mail         |
+| `RoyalMailSf`      | royal_mail_sf      |
 | `RrDonnelley`      | rr_donnelley       |
 | `RussianPost`      | russian_post       |
-| `Sendle`           | sendle             |
 | `Skypostal`        | skypostal          |
 | `Stuart`           | stuart             |
 | `Swyft`            | swyft              |
@@ -135,5 +127,3 @@
 | `Ups`              | ups                |
 | `Usps`             | usps               |
 | `Veho`             | veho               |
-| `XDelivery`        | x_delivery         |
-| `Yodel`            | yodel              |
