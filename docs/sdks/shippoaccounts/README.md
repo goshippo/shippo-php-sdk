@@ -1,12 +1,10 @@
 # ShippoAccounts
 
-
 ## Overview
 
 Shippo Accounts are used by Shippo Platform Accounts to create and manage Managed Shippo Accounts. 
 Managed Shippo Accounts are headless accounts that represent your customers. They are opaque to your end customers, meaning customers do not need to create their own Shippo login or have a billing relationship with Shippo. 
-They can be used by marketplaces, e-commerce platforms, and third-party logistics providers who want to offer, seamless, built-in shipping functionality to their customers. 
-<SchemaDefinition schemaRef="#/components/schemas/ShippoAccount"/>
+They can be used by marketplaces, e-commerce platforms, and third-party logistics providers who want to offer, seamless, built-in shipping functionality to their customers. See our [guide](https://docs.goshippo.com/docs/platformaccounts/platform_accounts/) for more details.
 
 ### Available Operations
 
@@ -17,210 +15,214 @@ They can be used by marketplaces, e-commerce platforms, and third-party logistic
 
 ## list
 
-Returns a list of Shippo Accounts objects
+Returns a list of Shippo Managed Accounts objects.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="ListShippoAccounts" method="get" path="/shippo-accounts" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->shippoAccounts->list(768578, 99895, '2018-02-08');
 
-    if ($response->shippoAccountPaginatedList !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->shippoAccounts->list(
+    page: 1,
+    results: 25
+
+);
+
+if ($response->shippoAccountPaginatedList !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `page`                                               | *int*                                                | :heavy_minus_sign:                                   | The page number you want to select                   |                                                      |
-| `results`                                            | *int*                                                | :heavy_minus_sign:                                   | The number of results to return per page (max 100)   |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                               | Type                                                                                                                                                    | Required                                                                                                                                                | Description                                                                                                                                             | Example                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `page`                                                                                                                                                  | *?int*                                                                                                                                                  | :heavy_minus_sign:                                                                                                                                      | The page number you want to select                                                                                                                      |                                                                                                                                                         |
+| `results`                                                                                                                                               | *?int*                                                                                                                                                  | :heavy_minus_sign:                                                                                                                                      | The number of results to return per page (max 100)                                                                                                      |                                                                                                                                                         |
+| `shippoApiVersion`                                                                                                                                      | *?string*                                                                                                                                               | :heavy_minus_sign:                                                                                                                                      | Optional string used to pick a non-default API version to use. See our [API version](https://docs.goshippo.com/docs/api_concepts/apiversioning/) guide. | 2018-02-08                                                                                                                                              |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\ListShippoAccountsResponse](../../Models/Operations/ListShippoAccountsResponse.md)**
+**[?Components\ShippoAccountPaginatedList](../../Models/Components/ShippoAccountPaginatedList.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## create
 
-Creates a Shippo Account object
+Creates a new [Shippo Managed Account](https://docs.goshippo.com/docs/platformaccounts/platform_using_accounts/).
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="CreateShippoAccount" method="post" path="/shippo-accounts" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-        $shippoAccountUpdateRequest = new Components\ShippoAccountUpdateRequest();
-    $shippoAccountUpdateRequest->email = 'hippo@shippo.com';
-    $shippoAccountUpdateRequest->firstName = 'Shippo';
-    $shippoAccountUpdateRequest->lastName = 'Meister';
-    $shippoAccountUpdateRequest->companyName = 'Acme';
+$shippoAccountUpdateRequest = new Components\ShippoAccountUpdateRequest(
+    email: 'hippo@shippo.com',
+    firstName: 'Shippo',
+    lastName: 'Meister',
+    companyName: 'Acme',
+);
 
-    $response = $sdk->shippoAccounts->create($shippoAccountUpdateRequest, '2018-02-08');
+$response = $sdk->shippoAccounts->create(
+    shippoAccountUpdateRequest: $shippoAccountUpdateRequest
+);
 
-    if ($response->shippoAccount !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->shippoAccount !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                         | Type                                                                                                              | Required                                                                                                          | Description                                                                                                       | Example                                                                                                           |
-| ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `shippoAccountUpdateRequest`                                                                                      | [\Shippo\API\Models\Components\ShippoAccountUpdateRequest](../../Models/Components/ShippoAccountUpdateRequest.md) | :heavy_check_mark:                                                                                                | N/A                                                                                                               |                                                                                                                   |
-| `shippoApiVersion`                                                                                                | *string*                                                                                                          | :heavy_minus_sign:                                                                                                | String used to pick a non-default API version to use                                                              | 2018-02-08                                                                                                        |
-
+| Parameter                                                                                                                                               | Type                                                                                                                                                    | Required                                                                                                                                                | Description                                                                                                                                             | Example                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `shippoAccountUpdateRequest`                                                                                                                            | [Components\ShippoAccountUpdateRequest](../../Models/Components/ShippoAccountUpdateRequest.md)                                                          | :heavy_check_mark:                                                                                                                                      | N/A                                                                                                                                                     |                                                                                                                                                         |
+| `shippoApiVersion`                                                                                                                                      | *?string*                                                                                                                                               | :heavy_minus_sign:                                                                                                                                      | Optional string used to pick a non-default API version to use. See our [API version](https://docs.goshippo.com/docs/api_concepts/apiversioning/) guide. | 2018-02-08                                                                                                                                              |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateShippoAccountResponse](../../Models/Operations/CreateShippoAccountResponse.md)**
+**[?Components\ShippoAccount](../../Models/Components/ShippoAccount.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## get
 
-Returns a Shippo Account using an object ID
+Returns a Shippo Managed Account using an object ID.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="GetShippoAccount" method="get" path="/shippo-accounts/{ShippoAccountId}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->shippoAccounts->get('<value>', '2018-02-08');
 
-    if ($response->shippoAccount !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->shippoAccounts->get(
+    shippoAccountId: '<id>'
+);
+
+if ($response->shippoAccount !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `shippoAccountId`                                    | *string*                                             | :heavy_check_mark:                                   | Object ID of the ShippoAccount                       |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                               | Type                                                                                                                                                    | Required                                                                                                                                                | Description                                                                                                                                             | Example                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `shippoAccountId`                                                                                                                                       | *string*                                                                                                                                                | :heavy_check_mark:                                                                                                                                      | Object ID of the ShippoAccount                                                                                                                          |                                                                                                                                                         |
+| `shippoApiVersion`                                                                                                                                      | *?string*                                                                                                                                               | :heavy_minus_sign:                                                                                                                                      | Optional string used to pick a non-default API version to use. See our [API version](https://docs.goshippo.com/docs/api_concepts/apiversioning/) guide. | 2018-02-08                                                                                                                                              |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetShippoAccountResponse](../../Models/Operations/GetShippoAccountResponse.md)**
+**[?Components\ShippoAccount](../../Models/Components/ShippoAccount.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## update
 
-Updates a Shippo Account object
+Updates a Shippo Managed Account using an object ID.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="UpdateShippoAccount" method="put" path="/shippo-accounts/{ShippoAccountId}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-        $shippoAccountUpdateRequest = new Components\ShippoAccountUpdateRequest();
-    $shippoAccountUpdateRequest->email = 'hippo@shippo.com';
-    $shippoAccountUpdateRequest->firstName = 'Shippo';
-    $shippoAccountUpdateRequest->lastName = 'Meister';
-    $shippoAccountUpdateRequest->companyName = 'Acme';
+$shippoAccountUpdateRequest = new Components\ShippoAccountUpdateRequest(
+    email: 'hippo@shippo.com',
+    firstName: 'Shippo',
+    lastName: 'Meister',
+    companyName: 'Acme',
+);
 
-    $response = $sdk->shippoAccounts->update('<value>', '2018-02-08', $shippoAccountUpdateRequest);
+$response = $sdk->shippoAccounts->update(
+    shippoAccountId: '<id>',
+    shippoAccountUpdateRequest: $shippoAccountUpdateRequest
 
-    if ($response->shippoAccount !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+);
+
+if ($response->shippoAccount !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                                         | Type                                                                                                              | Required                                                                                                          | Description                                                                                                       | Example                                                                                                           |
-| ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `shippoAccountId`                                                                                                 | *string*                                                                                                          | :heavy_check_mark:                                                                                                | Object ID of the ShippoAccount                                                                                    |                                                                                                                   |
-| `shippoApiVersion`                                                                                                | *string*                                                                                                          | :heavy_minus_sign:                                                                                                | String used to pick a non-default API version to use                                                              | 2018-02-08                                                                                                        |
-| `shippoAccountUpdateRequest`                                                                                      | [\Shippo\API\Models\Components\ShippoAccountUpdateRequest](../../Models/Components/ShippoAccountUpdateRequest.md) | :heavy_minus_sign:                                                                                                | N/A                                                                                                               |                                                                                                                   |
-
+| Parameter                                                                                                                                               | Type                                                                                                                                                    | Required                                                                                                                                                | Description                                                                                                                                             | Example                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `shippoAccountId`                                                                                                                                       | *string*                                                                                                                                                | :heavy_check_mark:                                                                                                                                      | Object ID of the ShippoAccount                                                                                                                          |                                                                                                                                                         |
+| `shippoApiVersion`                                                                                                                                      | *?string*                                                                                                                                               | :heavy_minus_sign:                                                                                                                                      | Optional string used to pick a non-default API version to use. See our [API version](https://docs.goshippo.com/docs/api_concepts/apiversioning/) guide. | 2018-02-08                                                                                                                                              |
+| `shippoAccountUpdateRequest`                                                                                                                            | [?Components\ShippoAccountUpdateRequest](../../Models/Components/ShippoAccountUpdateRequest.md)                                                         | :heavy_minus_sign:                                                                                                                                      | N/A                                                                                                                                                     |                                                                                                                                                         |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\UpdateShippoAccountResponse](../../Models/Operations/UpdateShippoAccountResponse.md)**
+**[?Components\ShippoAccount](../../Models/Components/ShippoAccount.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
