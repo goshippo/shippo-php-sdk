@@ -21,12 +21,19 @@ Shippo external API.: Use this API to integrate with the Shippo service
 
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
+<!-- $toc-max-depth=2 -->
+* [<img src="https://docs.goshippo.com/images/Logo.png" width="30" alt="Shippo logo"> Shippo PHP SDK](#img-srchttpsdocsgoshippocomimageslogopng-width30-altshippo-logo-shippo-php-sdk)
+  * [SDK Installation](#sdk-installation)
+  * [SDK Example Usage](#sdk-example-usage)
+  * [Authentication](#authentication)
+  * [Available Resources and Operations](#available-resources-and-operations)
+  * [Error Handling](#error-handling)
+  * [Server Selection](#server-selection)
+* [Development](#development)
+  * [Maturity](#maturity)
+  * [Contributions](#contributions)
+  * [About Shippo](#about-shippo)
 
-* [SDK Installation](#sdk-installation)
-* [SDK Example Usage](#sdk-example-usage)
-* [Available Resources and Operations](#available-resources-and-operations)
-* [Error Handling](#error-handling)
-* [Server Selection](#server-selection)
 <!-- End Table of Contents [toc] -->
 
 <!-- Start SDK Installation [installation] -->
@@ -34,26 +41,9 @@ Shippo external API.: Use this API to integrate with the Shippo service
 
 The SDK relies on [Composer](https://getcomposer.org/) to manage its dependencies.
 
-To install the SDK first add the below to your `composer.json` file:
-
-```json
-{
-    "repositories": [
-        {
-            "type": "github",
-            "url": "<UNSET>.git"
-        }
-    ],
-    "require": {
-        "Shippo": "*"
-    }
-}
-```
-
-Then run the following command:
-
+To install the SDK and add it as a dependency to an existing `composer.json` file:
 ```bash
-composer update
+composer require "shippo/shippo-php"
 ```
 <!-- End SDK Installation [installation] -->
 
@@ -69,18 +59,18 @@ require 'vendor/autoload.php';
 
 use Shippo\API;
 
-$security = '<YOUR_API_KEY_HERE>';
-
 $sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
 
 
 $response = $sdk->addresses->list(
     page: 1,
-    results: 5,
-    shippoApiVersion: '2018-02-08'
+    results: 5
 
 );
 
@@ -90,20 +80,60 @@ if ($response->addressPaginatedList !== null) {
 ```
 <!-- End SDK Example Usage [usage] -->
 
+<!-- Start Authentication [security] -->
+## Authentication
+
+### Per-Client Security Schemes
+
+This SDK supports the following security scheme globally:
+
+| Name           | Type   | Scheme  |
+| -------------- | ------ | ------- |
+| `apiKeyHeader` | apiKey | API key |
+
+To authenticate with the API the `apiKeyHeader` parameter must be set when initializing the SDK. For example:
+```php
+declare(strict_types=1);
+
+require 'vendor/autoload.php';
+
+use Shippo\API;
+
+$sdk = API\Shippo::builder()
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->setShippoApiVersion('2018-02-08')
+    ->build();
+
+
+
+$response = $sdk->addresses->list(
+    page: 1,
+    results: 5
+
+);
+
+if ($response->addressPaginatedList !== null) {
+    // handle response
+}
+```
+<!-- End Authentication [security] -->
+
 <!-- Start Available Resources and Operations [operations] -->
 ## Available Resources and Operations
 
 <details open>
 <summary>Available methods</summary>
 
-### [addresses](docs/sdks/addresses/README.md)
+### [Addresses](docs/sdks/addresses/README.md)
 
 * [list](docs/sdks/addresses/README.md#list) - List all addresses
 * [create](docs/sdks/addresses/README.md#create) - Create a new address
 * [get](docs/sdks/addresses/README.md#get) - Retrieve an address
 * [validate](docs/sdks/addresses/README.md#validate) - Validate an address
 
-### [batches](docs/sdks/batches/README.md)
+### [Batches](docs/sdks/batches/README.md)
 
 * [create](docs/sdks/batches/README.md#create) - Create a batch
 * [get](docs/sdks/batches/README.md#get) - Retrieve a batch
@@ -111,7 +141,7 @@ if ($response->addressPaginatedList !== null) {
 * [purchase](docs/sdks/batches/README.md#purchase) - Purchase a batch
 * [removeShipments](docs/sdks/batches/README.md#removeshipments) - Remove shipments from a batch
 
-### [carrierAccounts](docs/sdks/carrieraccounts/README.md)
+### [CarrierAccounts](docs/sdks/carrieraccounts/README.md)
 
 * [list](docs/sdks/carrieraccounts/README.md#list) - List all carrier accounts
 * [create](docs/sdks/carrieraccounts/README.md#create) - Create a new carrier account
@@ -121,97 +151,96 @@ if ($response->addressPaginatedList !== null) {
 * [register](docs/sdks/carrieraccounts/README.md#register) - Add a Shippo carrier account
 * [getRegistrationStatus](docs/sdks/carrieraccounts/README.md#getregistrationstatus) - Get Carrier Registration status
 
-### [carrierParcelTemplates](docs/sdks/carrierparceltemplates/README.md)
+### [CarrierParcelTemplates](docs/sdks/carrierparceltemplates/README.md)
 
 * [list](docs/sdks/carrierparceltemplates/README.md#list) - List all carrier parcel templates
 * [get](docs/sdks/carrierparceltemplates/README.md#get) - Retrieve a carrier parcel templates
 
-### [customsDeclarations](docs/sdks/customsdeclarations/README.md)
+### [CustomsDeclarations](docs/sdks/customsdeclarations/README.md)
 
 * [list](docs/sdks/customsdeclarations/README.md#list) - List all customs declarations
 * [create](docs/sdks/customsdeclarations/README.md#create) - Create a new customs declaration
 * [get](docs/sdks/customsdeclarations/README.md#get) - Retrieve a customs declaration
 
-### [customsItems](docs/sdks/customsitems/README.md)
+### [CustomsItems](docs/sdks/customsitems/README.md)
 
 * [list](docs/sdks/customsitems/README.md#list) - List all customs items
 * [create](docs/sdks/customsitems/README.md#create) - Create a new customs item
 * [get](docs/sdks/customsitems/README.md#get) - Retrieve a customs item
 
-### [manifests](docs/sdks/manifests/README.md)
+### [Manifests](docs/sdks/manifests/README.md)
 
 * [list](docs/sdks/manifests/README.md#list) - List all manifests
 * [create](docs/sdks/manifests/README.md#create) - Create a new manifest
 * [get](docs/sdks/manifests/README.md#get) - Retrieve a manifest
 
-### [orders](docs/sdks/orders/README.md)
+### [Orders](docs/sdks/orders/README.md)
 
 * [list](docs/sdks/orders/README.md#list) - List all orders
 * [create](docs/sdks/orders/README.md#create) - Create a new order
 * [get](docs/sdks/orders/README.md#get) - Retrieve an order
 
-### [parcels](docs/sdks/parcels/README.md)
+### [Parcels](docs/sdks/parcels/README.md)
 
 * [list](docs/sdks/parcels/README.md#list) - List all parcels
 * [create](docs/sdks/parcels/README.md#create) - Create a new parcel
 * [get](docs/sdks/parcels/README.md#get) - Retrieve an existing parcel
 
-### [pickups](docs/sdks/pickups/README.md)
+### [Pickups](docs/sdks/pickups/README.md)
 
 * [create](docs/sdks/pickups/README.md#create) - Create a pickup
 
-### [rates](docs/sdks/rates/README.md)
+### [Rates](docs/sdks/rates/README.md)
 
 * [get](docs/sdks/rates/README.md#get) - Retrieve a rate
 * [listShipmentRates](docs/sdks/rates/README.md#listshipmentrates) - Retrieve shipment rates
 * [listShipmentRatesByCurrencyCode](docs/sdks/rates/README.md#listshipmentratesbycurrencycode) - Retrieve shipment rates in currency
 
-### [ratesAtCheckout](docs/sdks/ratesatcheckout/README.md)
+### [RatesAtCheckout](docs/sdks/ratesatcheckout/README.md)
 
 * [create](docs/sdks/ratesatcheckout/README.md#create) - Generate a live rates request
 * [getDefaultParcelTemplate](docs/sdks/ratesatcheckout/README.md#getdefaultparceltemplate) - Show current default parcel template
 * [updateDefaultParcelTemplate](docs/sdks/ratesatcheckout/README.md#updatedefaultparceltemplate) - Update default parcel template
 * [deleteDefaultParcelTemplate](docs/sdks/ratesatcheckout/README.md#deletedefaultparceltemplate) - Clear current default parcel template
 
-### [refunds](docs/sdks/refunds/README.md)
+### [Refunds](docs/sdks/refunds/README.md)
 
 * [create](docs/sdks/refunds/README.md#create) - Create a refund
 * [list](docs/sdks/refunds/README.md#list) - List all refunds
 * [get](docs/sdks/refunds/README.md#get) - Retrieve a refund
 
-### [serviceGroups](docs/sdks/servicegroups/README.md)
+### [ServiceGroups](docs/sdks/servicegroups/README.md)
 
 * [list](docs/sdks/servicegroups/README.md#list) - List all service groups
 * [create](docs/sdks/servicegroups/README.md#create) - Create a new service group
 * [update](docs/sdks/servicegroups/README.md#update) - Update an existing service group
 * [delete](docs/sdks/servicegroups/README.md#delete) - Delete a service group
 
-### [shipments](docs/sdks/shipments/README.md)
+### [Shipments](docs/sdks/shipments/README.md)
 
 * [list](docs/sdks/shipments/README.md#list) - List all shipments
 * [create](docs/sdks/shipments/README.md#create) - Create a new shipment
 * [get](docs/sdks/shipments/README.md#get) - Retrieve a shipment
 
-
-### [shippoAccounts](docs/sdks/shippoaccounts/README.md)
+### [ShippoAccounts](docs/sdks/shippoaccounts/README.md)
 
 * [list](docs/sdks/shippoaccounts/README.md#list) - List all Shippo Accounts
 * [create](docs/sdks/shippoaccounts/README.md#create) - Create a Shippo Account
 * [get](docs/sdks/shippoaccounts/README.md#get) - Retrieve a Shippo Account
 * [update](docs/sdks/shippoaccounts/README.md#update) - Update a Shippo Account
 
-### [trackingStatus](docs/sdks/trackingstatus/README.md)
+### [TrackingStatus](docs/sdks/trackingstatus/README.md)
 
 * [create](docs/sdks/trackingstatus/README.md#create) - Register a tracking webhook
 * [get](docs/sdks/trackingstatus/README.md#get) - Get a tracking status
 
-### [transactions](docs/sdks/transactions/README.md)
+### [Transactions](docs/sdks/transactions/README.md)
 
 * [list](docs/sdks/transactions/README.md#list) - List all shipping labels
 * [create](docs/sdks/transactions/README.md#create) - Create a shipping label
 * [get](docs/sdks/transactions/README.md#get) - Retrieve a shipping label
 
-### [userParcelTemplates](docs/sdks/userparceltemplates/README.md)
+### [UserParcelTemplates](docs/sdks/userparceltemplates/README.md)
 
 * [list](docs/sdks/userparceltemplates/README.md#list) - List all user parcel templates
 * [create](docs/sdks/userparceltemplates/README.md#create) - Create a new user parcel template
@@ -219,7 +248,7 @@ if ($response->addressPaginatedList !== null) {
 * [get](docs/sdks/userparceltemplates/README.md#get) - Retrieves a user parcel template
 * [update](docs/sdks/userparceltemplates/README.md#update) - Update an existing user parcel template
 
-### [webhooks](docs/sdks/webhooks/README.md)
+### [Webhooks](docs/sdks/webhooks/README.md)
 
 * [createWebhook](docs/sdks/webhooks/README.md#createwebhook) - Create a new webhook
 * [listWebhooks](docs/sdks/webhooks/README.md#listwebhooks) - List all webhooks
@@ -249,8 +278,8 @@ When custom error responses are specified for an operation, the SDK may also thr
 | Error Type                                                     | Status Code | Content Type     |
 | -------------------------------------------------------------- | ----------- | ---------------- |
 | Errors\InitiateOauth2SigninResponseBody                        | 400         | application/json |
-| Errors\InitiateOauth2SigninCarrierAccountsResponseBody         | 401         | application/json |
-| Errors\InitiateOauth2SigninCarrierAccountsResponseResponseBody | 404         | application/json |
+| Errors\InitiateOauth2SigninCarrierAccountsResponseResponseBody | 401         | application/json |
+| Errors\InitiateOauth2SigninCarrierAccountsResponseBody         | 404         | application/json |
 | Errors\SDKError                                                | 4XX, 5XX    | \*/\*            |
 
 ### Example
@@ -261,18 +290,20 @@ declare(strict_types=1);
 require 'vendor/autoload.php';
 
 use Shippo\API;
+use Shippo\API\Models\Errors;
 use Shippo\API\Models\Operations;
-
-$security = '<YOUR_API_KEY_HERE>';
 
 $sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
 try {
     $request = new Operations\InitiateOauth2SigninRequest(
         carrierAccountObjectId: '<id>',
-        redirectUri: 'https://enlightened-mortise.com/',
+        redirectUri: 'https://ashamed-reporter.biz',
     );
 
     $response = $sdk->carrierAccounts->initiateOauth2Signin(
@@ -285,10 +316,10 @@ try {
 } catch (Errors\InitiateOauth2SigninResponseBodyThrowable $e) {
     // handle $e->$container data
     throw $e;
-} catch (Errors\InitiateOauth2SigninCarrierAccountsResponseBodyThrowable $e) {
+} catch (Errors\InitiateOauth2SigninCarrierAccountsResponseResponseBodyThrowable $e) {
     // handle $e->$container data
     throw $e;
-} catch (Errors\InitiateOauth2SigninCarrierAccountsResponseResponseBodyThrowable $e) {
+} catch (Errors\InitiateOauth2SigninCarrierAccountsResponseBodyThrowable $e) {
     // handle $e->$container data
     throw $e;
 } catch (Errors\SDKError $e) {
@@ -303,7 +334,7 @@ try {
 
 ### Override Server URL Per-Client
 
-The default server can also be overridden globally using the `setServerUrl(string $serverUrl)` builder method when initializing the SDK client instance. For example:
+The default server can be overridden globally using the `setServerUrl(string $serverUrl)` builder method when initializing the SDK client instance. For example:
 ```php
 declare(strict_types=1);
 
@@ -311,19 +342,19 @@ require 'vendor/autoload.php';
 
 use Shippo\API;
 
-$security = '<YOUR_API_KEY_HERE>';
-
 $sdk = API\Shippo::builder()
-    ->setServerURL("https://api.goshippo.com")
+    ->setServerURL('https://api.goshippo.com')
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
 
 
 $response = $sdk->addresses->list(
     page: 1,
-    results: 5,
-    shippoApiVersion: '2018-02-08'
+    results: 5
 
 );
 
