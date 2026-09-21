@@ -1,10 +1,8 @@
 # Addresses
 
-
 ## Overview
 
 Addresses are the locations a parcel is being shipped **from** and **to**. They represent company and residential places. Among other things, you can use address objects to create shipments, calculate shipping rates, and purchase shipping labels.
-<SchemaDefinition schemaRef="#/components/schemas/Address"/>
 
 ### Available Operations
 
@@ -19,50 +17,51 @@ Returns a list of all address objects that have been created in this account.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="ListAddresses" method="get" path="/addresses" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->addresses->list(768578, 99895, '2018-02-08');
 
-    if ($response->addressPaginatedList !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->addresses->list(
+    page: 1,
+    results: 5
+
+);
+
+if ($response->addressPaginatedList !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                     | Type                                                          | Required                                                      | Description                                                   | Example                                                       |
-| ------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------- |
-| `page`                                                        | *int*                                                         | :heavy_minus_sign:                                            | The page number you want to select                            |                                                               |
-| `results`                                                     | *int*                                                         | :heavy_minus_sign:                                            | The number of results to return per page (max 100, default 5) |                                                               |
-| `shippoApiVersion`                                            | *string*                                                      | :heavy_minus_sign:                                            | String used to pick a non-default API version to use          | 2018-02-08                                                    |
-
+| Parameter                                                                                                                                               | Type                                                                                                                                                    | Required                                                                                                                                                | Description                                                                                                                                             | Example                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `page`                                                                                                                                                  | *?int*                                                                                                                                                  | :heavy_minus_sign:                                                                                                                                      | The page number you want to select                                                                                                                      |                                                                                                                                                         |
+| `results`                                                                                                                                               | *?int*                                                                                                                                                  | :heavy_minus_sign:                                                                                                                                      | The number of results to return per page (max 100, default 5)                                                                                           |                                                                                                                                                         |
+| `shippoApiVersion`                                                                                                                                      | *?string*                                                                                                                                               | :heavy_minus_sign:                                                                                                                                      | Optional string used to pick a non-default API version to use. See our [API version](https://docs.goshippo.com/docs/api_concepts/apiversioning/) guide. | 2018-02-08                                                                                                                                              |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\ListAddressesResponse](../../Models/Operations/ListAddressesResponse.md)**
+**[?Components\AddressPaginatedList](../../Models/Components/AddressPaginatedList.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## create
 
@@ -70,64 +69,64 @@ Creates a new address object. You can use address objects to create new shipment
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="CreateAddress" method="post" path="/addresses" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
+use Shippo\API\Models\Components;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-        $addressCreateRequest = new Components\AddressCreateRequest();
-    $addressCreateRequest->name = 'Shwan Ippotle';
-    $addressCreateRequest->company = 'Shippo';
-    $addressCreateRequest->street1 = '215 Clayton St.';
-    $addressCreateRequest->street2 = '<value>';
-    $addressCreateRequest->street3 = '';
-    $addressCreateRequest->streetNo = '';
-    $addressCreateRequest->city = 'San Francisco';
-    $addressCreateRequest->state = 'CA';
-    $addressCreateRequest->zip = '94117';
-    $addressCreateRequest->country = 'US';
-    $addressCreateRequest->phone = '+1 555 341 9393';
-    $addressCreateRequest->email = 'shippotle@shippo.com';
-    $addressCreateRequest->isResidential = true;
-    $addressCreateRequest->metadata = 'Customer ID 123456';
-    $addressCreateRequest->validate = true;
+$addressCreateRequest = new Components\AddressCreateRequest(
+    name: 'Shwan Ippotle',
+    company: 'Shippo',
+    street1: '215 Clayton St.',
+    street3: '',
+    streetNo: '',
+    city: 'San Francisco',
+    state: 'CA',
+    zip: '94117',
+    country: 'US',
+    phone: '+1 555 341 9393',
+    email: 'shippotle@shippo.com',
+    isResidential: true,
+    metadata: 'Customer ID 123456',
+    validate: true,
+);
 
-    $response = $sdk->addresses->create($addressCreateRequest, '2018-02-08');
+$response = $sdk->addresses->create(
+    addressCreateRequest: $addressCreateRequest
+);
 
-    if ($response->address !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+if ($response->address !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                                                                             | Type                                                                                                  | Required                                                                                              | Description                                                                                           | Example                                                                                               |
-| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `addressCreateRequest`                                                                                | [\Shippo\API\Models\Components\AddressCreateRequest](../../Models/Components/AddressCreateRequest.md) | :heavy_check_mark:                                                                                    | Address details.                                                                                      |                                                                                                       |
-| `shippoApiVersion`                                                                                    | *string*                                                                                              | :heavy_minus_sign:                                                                                    | String used to pick a non-default API version to use                                                  | 2018-02-08                                                                                            |
-
+| Parameter                                                                                                                                               | Type                                                                                                                                                    | Required                                                                                                                                                | Description                                                                                                                                             | Example                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `addressCreateRequest`                                                                                                                                  | [Components\AddressCreateRequest](../../Models/Components/AddressCreateRequest.md)                                                                      | :heavy_check_mark:                                                                                                                                      | Address details.                                                                                                                                        |                                                                                                                                                         |
+| `shippoApiVersion`                                                                                                                                      | *?string*                                                                                                                                               | :heavy_minus_sign:                                                                                                                                      | Optional string used to pick a non-default API version to use. See our [API version](https://docs.goshippo.com/docs/api_concepts/apiversioning/) guide. | 2018-02-08                                                                                                                                              |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\CreateAddressResponse](../../Models/Operations/CreateAddressResponse.md)**
+**[?Components\Address](../../Models/Components/Address.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## get
 
@@ -135,49 +134,48 @@ Returns an existing address using an object ID.
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="GetAddress" method="get" path="/addresses/{AddressId}" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->addresses->get('<value>', '2018-02-08');
 
-    if ($response->address !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->addresses->get(
+    addressId: '<id>'
+);
+
+if ($response->address !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `addressId`                                          | *string*                                             | :heavy_check_mark:                                   | Object ID of the address                             |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                               | Type                                                                                                                                                    | Required                                                                                                                                                | Description                                                                                                                                             | Example                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `addressId`                                                                                                                                             | *string*                                                                                                                                                | :heavy_check_mark:                                                                                                                                      | Object ID of the address                                                                                                                                |                                                                                                                                                         |
+| `shippoApiVersion`                                                                                                                                      | *?string*                                                                                                                                               | :heavy_minus_sign:                                                                                                                                      | Optional string used to pick a non-default API version to use. See our [API version](https://docs.goshippo.com/docs/api_concepts/apiversioning/) guide. | 2018-02-08                                                                                                                                              |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\GetAddressResponse](../../Models/Operations/GetAddressResponse.md)**
+**[?Components\Address](../../Models/Components/Address.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
 
 ## validate
 
@@ -185,46 +183,45 @@ Validates an existing address using an object ID
 
 ### Example Usage
 
+<!-- UsageSnippet language="php" operationID="ValidateAddress" method="get" path="/addresses/{AddressId}/validate" -->
 ```php
-<?php
-
 declare(strict_types=1);
 
 require 'vendor/autoload.php';
 
-use \Shippo\API;
-use \Shippo\API\Models\Components;
-use \Shippo\API\Models\Operations;
+use Shippo\API;
 
-$security = new Components\Security();
-$security->apiKeyHeader = '<YOUR_API_KEY_HERE>';
-
-$sdk = API\ShippoSDK::builder()
+$sdk = API\Shippo::builder()
     ->setShippoApiVersion('2018-02-08')
-    ->setSecurity($security)->build();
+    ->setSecurity(
+        '<YOUR_API_KEY_HERE>'
+    )
+    ->build();
 
-try {
-    
 
-    $response = $sdk->addresses->validate('<value>', '2018-02-08');
 
-    if ($response->address !== null) {
-        // handle response
-    }
-} catch (Throwable $e) {
-    // handle exception
+$response = $sdk->addresses->validate(
+    addressId: '<id>'
+);
+
+if ($response->address !== null) {
+    // handle response
 }
 ```
 
 ### Parameters
 
-| Parameter                                            | Type                                                 | Required                                             | Description                                          | Example                                              |
-| ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------- |
-| `addressId`                                          | *string*                                             | :heavy_check_mark:                                   | Object ID of the address                             |                                                      |
-| `shippoApiVersion`                                   | *string*                                             | :heavy_minus_sign:                                   | String used to pick a non-default API version to use | 2018-02-08                                           |
-
+| Parameter                                                                                                                                               | Type                                                                                                                                                    | Required                                                                                                                                                | Description                                                                                                                                             | Example                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `addressId`                                                                                                                                             | *string*                                                                                                                                                | :heavy_check_mark:                                                                                                                                      | Object ID of the address                                                                                                                                |                                                                                                                                                         |
+| `shippoApiVersion`                                                                                                                                      | *?string*                                                                                                                                               | :heavy_minus_sign:                                                                                                                                      | Optional string used to pick a non-default API version to use. See our [API version](https://docs.goshippo.com/docs/api_concepts/apiversioning/) guide. | 2018-02-08                                                                                                                                              |
 
 ### Response
 
-**[?\Shippo\API\Models\Operations\ValidateAddressResponse](../../Models/Operations/ValidateAddressResponse.md)**
+**[?Components\Address](../../Models/Components/Address.md)**
 
+### Errors
+
+| Error Type      | Status Code     | Content Type    |
+| --------------- | --------------- | --------------- |
+| Errors\SDKError | 4XX, 5XX        | \*/\*           |
