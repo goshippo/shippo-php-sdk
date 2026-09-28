@@ -1,18 +1,25 @@
-speakeasyVersion: 1.310.0
+speakeasyVersion: 1.799.0
 sources:
     openapi:
         sourceNamespace: openapi
-        sourceRevisionDigest: sha256:3099fc4c926ab05099ea5c4cbb918e6423a03874cea38c8791efa7efbe6c5706
-        sourceBlobDigest: sha256:234f83b39101f22af624857db75abc2440fbe9c279d457ab0a7c8a393245cab1
+        sourceRevisionDigest: sha256:e1e9d85e0b3523b2eb4bc905d67b60106705de148f5177ea6b7896f5c3449486
+        sourceBlobDigest: sha256:e25d52459b1c757d0bade7c148aa1c8d26029f85965c174d4ef604662177fc2f
         tags:
             - latest
+            - "2018-02-08"
 targets:
     my-first-target:
         source: openapi
         sourceNamespace: openapi
         sourceRevisionDigest: sha256:3099fc4c926ab05099ea5c4cbb918e6423a03874cea38c8791efa7efbe6c5706
         sourceBlobDigest: sha256:234f83b39101f22af624857db75abc2440fbe9c279d457ab0a7c8a393245cab1
-        outLocation: /Users/mike.lueders/dev/shippo-php-sdk
+    php:
+        source: openapi
+        sourceNamespace: openapi
+        sourceRevisionDigest: sha256:e1e9d85e0b3523b2eb4bc905d67b60106705de148f5177ea6b7896f5c3449486
+        sourceBlobDigest: sha256:e25d52459b1c757d0bade7c148aa1c8d26029f85965c174d4ef604662177fc2f
+        codeSamplesNamespace: openapi-php-code-samples
+        codeSamplesRevisionDigest: sha256:5b33490aaebef3614961856a23da0c9e28232dcabced5d83cbd5b5a338a67e2c
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
@@ -23,6 +30,16 @@ workflow:
             registry:
                 location: registry.speakeasyapi.dev/shippo/shippo/openapi
     targets:
-        my-first-target:
+        php:
             target: php
             source: openapi
+            publish:
+                packagist:
+                    username: tech@shippo.com
+                    token: $packagist_token
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/shippo/shippo/openapi-php-code-samples
+                labelOverride:
+                    fixedValue: Php (SDK)
+                blocking: false
