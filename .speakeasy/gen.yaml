@@ -38,7 +38,7 @@ php:
     enabled: false
     svcName: openapi
   license: MIT License
-  maxMethodParams: 3
+  maxMethodParams: 4
   namespace: Shippo\API
   outputModelSuffix: output
   packageName: shippo/shippo-php
